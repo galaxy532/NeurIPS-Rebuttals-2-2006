@@ -1,0 +1,63 @@
+# =============================================================================
+# Rebuttals_2 .gitignore
+#
+# Written to avoid the two failures of the Rebuttals/ repo, where these rules
+# were added AFTER the offending files had already been committed. A .gitignore
+# has no effect on files git is already tracking. If something slips through:
+#
+#     git rm -r --cached __pycache__ .ipynb_checkpoints && git commit
+#
+# Check before the first commit, not after:  git status --short
+# =============================================================================
+
+# --- Data. Never committed: too large for GitHub, and not ours to redistribute.
+# Lives in ../data/ (a SIBLING of this repo) so an accidental `git add -A`
+# cannot reach it. These patterns are belt-and-braces.
+data/
+datasets/
+*.csv
+*.tsv
+*.zip
+*.tar.gz
+*.tgz
+*.parquet
+*.feather
+*.h5
+*.hdf5
+
+# --- Generated artefacts. Regenerable, so they do not belong in history.
+# results/  is where every script writes. Ignored wholesale.
+# reported/ is the exception: numbers that actually went into the rebuttal are
+#           copied there BY HAND and committed, so the response text is
+#           reproducible from the repo alone.
+results/*
+!results/.gitkeep
+*.npz
+*.npy
+*.pt
+*.pth
+*.ckpt
+
+# --- Python. These are the ones the old repo tracked by accident.
+__pycache__/
+*.py[cod]
+*$py.class
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+.venv/
+venv/
+env/
+.pytest_cache/
+*.egg-info/
+.mypy_cache/
+
+# --- Editors / OS
+.DS_Store
+.vscode/
+.idea/
+*.swp
+
+# --- Logs
+*.log
+nohup.out
+wandb/
