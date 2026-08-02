@@ -1,0 +1,89 @@
+{
+  "dataset": "readmission",
+  "n_used": 62880,
+  "n_total": 62880,
+  "n_groups": 3,
+  "n_clusters": 62880,
+  "r_names": [
+    "number_inpatient",
+    "number_emergency",
+    "number_outpatient",
+    "number_diagnoses",
+    "n_diag_coded"
+  ],
+  "s_names": [
+    "time_in_hospital",
+    "num_lab_procedures",
+    "num_medications",
+    "num_procedures"
+  ],
+  "group_name": "admission_source_id",
+  "loader_notes": {
+    "file": "diabetic_data.csv",
+    "rows_raw": 101766,
+    "rows_after_first_encounter": 71518,
+    "encounters_dropped": 30248,
+    "source_17_decodes_to": "NULL",
+    "source_17_drop_justified": true,
+    "rows_dropped_source_17": 4949,
+    "positive_rate": 0.08817918250236596,
+    "min_cell": 200,
+    "groups_before_min_cell": 16,
+    "groups_after_min_cell": 3,
+    "rows_dropped_by_min_cell": 3689,
+    "smallest_surviving_cell": 216
+  },
+  "n_perm": 20,
+  "seed": 0,
+  "by_label": {
+    "0": {
+      "n": 57332,
+      "relational": {
+        "r2_pooled": 0.046830409603801665,
+        "r2_group_aware": 0.04685879583648642,
+        "delta_r2": 2.838623268475171e-05,
+        "n_train": 40132,
+        "n_test": 17200
+      },
+      "level_and_relational": {
+        "r2_pooled": 0.04225064881039381,
+        "r2_group_aware": 0.08967855093296878,
+        "delta_r2": 0.04742790212257497,
+        "n_train": 40132,
+        "n_test": 17200
+      },
+      "level_only_delta": 0.04739951588989022,
+      "null_mean": -2.9355149023996273e-06,
+      "null_sd": 9.263155525708704e-05,
+      "p_value": 0.47619047619047616,
+      "z": 0.33813258883780833,
+      "passes": false
+    },
+    "1": {
+      "n": 5548,
+      "relational": {
+        "r2_pooled": 0.017922052524856513,
+        "r2_group_aware": 0.018280837294060742,
+        "delta_r2": 0.00035878476920422897,
+        "n_train": 3883,
+        "n_test": 1665
+      },
+      "level_and_relational": {
+        "r2_pooled": 0.024508992464494395,
+        "r2_group_aware": 0.05026787159788282,
+        "delta_r2": 0.025758879133388424,
+        "n_train": 3883,
+        "n_test": 1665
+      },
+      "level_only_delta": 0.025400094364184195,
+      "null_mean": 5.484631863058032e-05,
+      "null_sd": 0.000621750039039,
+      "p_value": 0.42857142857142855,
+      "z": 0.4888434764610988,
+      "passes": false
+    }
+  },
+  "effect_size": 0.00019358550094449034,
+  "passes": false,
+  "seconds": 122.3
+}

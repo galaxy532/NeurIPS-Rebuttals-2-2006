@@ -1,0 +1,102 @@
+{
+  "dataset": "assistments",
+  "n_used": 197278,
+  "n_total": 2172716,
+  "n_groups": 147,
+  "n_clusters": 2209,
+  "r_names": [
+    "n_prior_skill",
+    "rate_prior_skill",
+    "rate_prior_all"
+  ],
+  "s_names": [
+    "mean_prior_ms",
+    "mean_prior_hints"
+  ],
+  "group_name": "school_id",
+  "loader_notes": {
+    "file": "2012-2013-data-with-predictions-4-final.csv",
+    "rows_raw": 6123270,
+    "rows_after_skill_filter": 2711813,
+    "rows_after_original_filter": 2623624,
+    "correct_values_seen": [
+      0.0,
+      0.25,
+      0.5,
+      0.6,
+      0.65,
+      0.75,
+      0.95,
+      1.0
+    ],
+    "rows_partial_credit": 211,
+    "frac_partial_credit": 8e-05,
+    "rows_after_partial_credit_drop": 2623413,
+    "rows_dropped_unparseable_time": 49161,
+    "rows_dropped_no_history": 373820,
+    "rows_after_history": 2200432,
+    "log1p_applied": [
+      "mean_prior_ms"
+    ],
+    "min_cell": 200,
+    "groups_before_min_cell": 359,
+    "groups_after_min_cell": 149,
+    "rows_dropped_by_min_cell": 27716,
+    "smallest_surviving_cell": 200,
+    "positive_rate": 0.7133661279246805,
+    "n_students": 24006
+  },
+  "n_perm": 20,
+  "seed": 0,
+  "by_label": {
+    "0": {
+      "n": 56951,
+      "relational": {
+        "r2_pooled": 0.13868033107829764,
+        "r2_group_aware": 0.08664226206847264,
+        "delta_r2": -0.052038069009824994,
+        "n_train": 39152,
+        "n_test": 17799
+      },
+      "level_and_relational": {
+        "r2_pooled": 0.16423648859907325,
+        "r2_group_aware": 0.2257449809245956,
+        "delta_r2": 0.06150849232552236,
+        "n_train": 39152,
+        "n_test": 17799
+      },
+      "level_only_delta": 0.11354656133534735,
+      "null_mean": -0.11632321087118047,
+      "null_sd": 0.04551128324792862,
+      "p_value": 0.047619047619047616,
+      "z": 1.41250998156114,
+      "passes": false
+    },
+    "1": {
+      "n": 140327,
+      "relational": {
+        "r2_pooled": 0.18587476680055404,
+        "r2_group_aware": 0.15814045156446344,
+        "delta_r2": -0.0277343152360906,
+        "n_train": 96118,
+        "n_test": 44209
+      },
+      "level_and_relational": {
+        "r2_pooled": 0.1600369136906808,
+        "r2_group_aware": 0.3283165474733923,
+        "delta_r2": 0.1682796337827115,
+        "n_train": 96118,
+        "n_test": 44209
+      },
+      "level_only_delta": 0.1960139490188021,
+      "null_mean": -0.10582203712564678,
+      "null_sd": 0.022438462849138953,
+      "p_value": 0.047619047619047616,
+      "z": 3.480083391387601,
+      "passes": false
+    }
+  },
+  "effect_size": -0.0398861921229578,
+  "passes": false,
+  "seconds": 163.8
+}
