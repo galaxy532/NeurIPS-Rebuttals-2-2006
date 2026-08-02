@@ -50,8 +50,18 @@ def _say(msg: str = "") -> None:
     print(msg, flush=True)
 
 
-def count_rows(path: Path) -> int | None:
-    """Row count without loading the frame. Returns None if not countable."""
+def count_lines(path: Path) -> int | None:
+    """
+    PHYSICAL LINE COUNT — not a row count.
+
+    These differ whenever a quoted field contains a newline, and the first run
+    of this script tripped over exactly that: the ASSISTments `actions` column
+    stores embedded YAML with real line breaks, so the line count came out at
+    82,773,406 against a true 6,123,270 rows — off by a factor of 13. The
+    number is still worth having (it is nearly free, and a large gap between
+    lines and rows is itself a useful signal that a column holds multi-line
+    text), but it must never be reported as the row count.
+    """
     try:
         if path.suffix == ".gz":
             import gzip
@@ -63,6 +73,51 @@ def count_rows(path: Path) -> int | None:
     except Exception:                                            # noqa: BLE001
         return None
     return None
+
+
+def count_rows_exact(path: Path, enc: str) -> int | None:
+    """True row count, via a chunked parse. Costs a full pass; worth it."""
+    try:
+        total = 0
+        for chunk in pd.read_csv(path, encoding=enc, low_memory=False,
+                                 usecols=[0], chunksize=500_000,
+                                 sep="\t" if path.suffix == ".tsv" else ","):
+            total += len(chunk)
+        return total
+    except Exception:                                            # noqa: BLE001
+        return None
+
+
+def group_profile(path: Path, enc: str, col: str) -> dict | None:
+    """
+    Exact cardinality and cell sizes for one column, over the WHOLE file.
+
+    The sniffed n_unique in the column table is computed on the first 20k rows
+    only, and these files are written in blocks — the ACS csv is concatenated
+    state by state, so the first 20k rows are all one state and the sniff
+    reports ST as constant. That looks alarming and means nothing. Group
+    cardinality is the input to the screen, so it gets measured properly.
+    """
+    try:
+        counts = None
+        for chunk in pd.read_csv(path, encoding=enc, low_memory=False,
+                                 usecols=[col], chunksize=500_000,
+                                 sep="\t" if path.suffix == ".tsv" else ","):
+            vc = chunk[col].value_counts()
+            counts = vc if counts is None else counts.add(vc, fill_value=0)
+        if counts is None:
+            return None
+        counts = counts.sort_values(ascending=False).astype(int)
+        return {
+            "column": col,
+            "n_groups": int(len(counts)),
+            "n_groups_ge_200": int((counts >= 200).sum()),
+            "n_groups_ge_2000": int((counts >= 2000).sum()),
+            "largest": {str(k): int(v) for k, v in counts.head(10).items()},
+            "smallest": {str(k): int(v) for k, v in counts.tail(5).items()},
+        }
+    except Exception as exc:                                     # noqa: BLE001
+        return {"column": col, "error": str(exc)}
 
 
 def read_head(path: Path) -> tuple[pd.DataFrame | None, str]:
@@ -85,7 +140,16 @@ def read_head(path: Path) -> tuple[pd.DataFrame | None, str]:
     return None, "no working encoding"
 
 
-def describe(path: Path) -> dict:
+# Candidate group columns, per folder. Profiled exactly (whole-file pass)
+# because group cardinality and cell sizes are what the screen consumes.
+GROUP_COLS = {
+    "acsincome": ["ST", "y"],
+    "readmission": ["admission_source_id", "readmitted"],
+    "assistments": ["school_id"],
+}
+
+
+def describe(path: Path, exact: bool = False) -> dict:
     size_mb = path.stat().st_size / 1e6
     rec = {
         "path": str(path),
@@ -98,9 +162,18 @@ def describe(path: Path) -> dict:
     if df is None:
         return rec
 
-    n_rows = count_rows(path)
-    rec["rows_total"] = n_rows
+    rec["physical_lines"] = count_lines(path)
     rec["rows_sniffed"] = int(len(df))
+    if exact:
+        enc = how if how in ("utf-8", "latin-1") else "utf-8"
+        rec["rows_exact"] = count_rows_exact(path, enc)
+        if (rec["rows_exact"] and rec["physical_lines"]
+                and rec["physical_lines"] > 1.05 * rec["rows_exact"]):
+            rec["multiline_fields"] = True
+        for col in GROUP_COLS.get(path.parent.name, []):
+            if col in df.columns:
+                rec.setdefault("group_profiles", []).append(
+                    group_profile(path, enc, col))
     rec["n_columns"] = int(df.shape[1])
     rec["columns"] = [str(c) for c in df.columns]
     rec["dtypes"] = {str(c): str(t) for c, t in df.dtypes.items()}
@@ -118,7 +191,24 @@ def describe(path: Path) -> dict:
 
 
 def main() -> int:
+    import argparse
+    ap = argparse.ArgumentParser(description="Describe the files actually on disk.")
+    ap.add_argument("--exact", action="store_true",
+                    help="full chunked pass: true row counts and exact group "
+                         "cardinality. Minutes on the 3 GB ASSISTments file, "
+                         "and the only way to get either number right.")
+    ap.add_argument("--max-mb", type=float, default=None,
+                    help="skip files larger than this many MB")
+    ap.add_argument("--out", type=Path, default=REPO_ROOT / "results",
+                    help="where to write the report. Point this at /tmp when "
+                         "testing: writing test output into the tracked "
+                         "results/ folder overwrites real results, which has "
+                         "already happened once.")
+    args = ap.parse_args()
+
     _say(f"data root: {DATA_ROOT}")
+    if args.exact:
+        _say("exact mode: full pass per file, this is not instant")
     if not DATA_ROOT.exists():
         _say("!! data root does not exist.")
         _say("   Either the download has not run, or the folder was renamed.")
@@ -135,15 +225,19 @@ def main() -> int:
                           "size_mb": round(path.stat().st_size / 1e6, 2)})
             continue
         if path.suffix.lower() in TABULAR_SUFFIXES:
+            if args.max_mb and path.stat().st_size / 1e6 > args.max_mb:
+                other.append({"path": str(path), "note": "skipped, over --max-mb",
+                              "size_mb": round(path.stat().st_size / 1e6, 2)})
+                continue
             _say(f"  reading {path.relative_to(DATA_ROOT)} ...")
-            records.append(describe(path))
+            records.append(describe(path, exact=args.exact))
         else:
             other.append({"path": str(path),
                           "size_mb": round(path.stat().st_size / 1e6, 2)})
 
     out = {"data_root": str(DATA_ROOT), "tabular": records, "other_files": other}
-    res_dir = REPO_ROOT / "results"
-    res_dir.mkdir(exist_ok=True)
+    res_dir = args.out
+    res_dir.mkdir(parents=True, exist_ok=True)
     (res_dir / "data_audit.json").write_text(json.dumps(out, indent=2, default=str))
 
     # Markdown mirror, because this is the artefact a human reads.
@@ -152,13 +246,36 @@ def main() -> int:
              f"{len(records)} tabular file(s), {len(other)} other file(s).", ""]
     for rec in records:
         lines += [f"## `{rec['parent']}/{rec['name']}`", ""]
+        rows = rec.get("rows_exact")
+        rows_str = (f"{rows:,} (exact)" if rows
+                    else f"unknown — physical lines {rec.get('physical_lines')}, "
+                         "which is NOT the row count if any field is multi-line; "
+                         "re-run with --exact")
         lines += [f"- size: {rec['size_mb']} MB",
-                  f"- rows: {rec.get('rows_total', 'unknown')}",
+                  f"- rows: {rows_str}",
                   f"- columns: {rec.get('n_columns', 'unreadable')}",
-                  f"- read as: {rec['read']}", ""]
+                  f"- read as: {rec['read']}"]
+        if rec.get("multiline_fields"):
+            lines.append(f"- **multi-line fields present**: "
+                         f"{rec['physical_lines']:,} physical lines vs "
+                         f"{rows:,} rows")
+        for gp in rec.get("group_profiles", []):
+            if "error" in gp:
+                lines.append(f"- group `{gp['column']}`: FAILED — {gp['error']}")
+            else:
+                lines.append(
+                    f"- group `{gp['column']}`: {gp['n_groups']} distinct, "
+                    f"{gp['n_groups_ge_200']} with >=200 rows, "
+                    f"{gp['n_groups_ge_2000']} with >=2000 rows")
+        lines.append("")
         if "columns" not in rec:
             lines += ["**could not be parsed**", ""]
             continue
+        lines += ["Column n-unique below is measured on the first 20k rows only. "
+                  "These files are written in blocks, so a block-sorted column "
+                  "(ACS is concatenated state by state) will look constant here "
+                  "and is not. Trust the group lines above, not this table, for "
+                  "cardinality.", ""]
         lines += ["| column | dtype | null frac | n unique | sample |",
                   "|---|---|---|---|---|"]
         for c in rec["columns"]:

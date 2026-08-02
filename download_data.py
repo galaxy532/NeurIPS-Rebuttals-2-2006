@@ -100,9 +100,12 @@ CONTRACTS = {
         "expected": ["SEX", "RAC1P"],
         "min_rows": 100_000,
     },
+    # A1Cresult and max_glu_serum were required here until 2026-07-30. They are
+    # 81% and 90% missing, and the decision to order the test is the hospital's,
+    # so the columns straddle the r/s split. Dropped — see PREREGISTRATION.md.
     "readmission": {
-        "required": ["number_inpatient", "number_diagnoses", "A1Cresult",
-                     "max_glu_serum",                          # r block
+        "required": ["number_inpatient", "number_emergency", "number_outpatient",
+                     "number_diagnoses", "diag_1", "diag_2", "diag_3",  # r block
                      "time_in_hospital", "num_lab_procedures",
                      "num_medications", "num_procedures",      # s block
                      "admission_source_id",                    # group
@@ -110,13 +113,16 @@ CONTRACTS = {
         "expected": ["age", "gender", "discharge_disposition_id"],
         "min_rows": 50_000,
     },
+    # Rewritten 2026-07-30 for the 2012-2013 release, which is what the Kaggle
+    # slug actually ships: no order_id (use start_time), no opportunity (we
+    # compute prior practice ourselves), and `correct` is not binary.
     "assistments": {
-        "required": ["user_id", "order_id", "skill_id", "correct",
-                     "opportunity",                            # r block source
-                     "ms_first_response",                      # s block source
+        "required": ["user_id", "skill_id", "correct", "original",
+                     "start_time",                             # ordering
+                     "ms_first_response", "hint_count",        # s block source
                      "school_id"],                             # group
-        "expected": ["attempt_count", "hint_count", "overlap_time",
-                     "assistment_id", "problem_id", "original"],
+        "expected": ["attempt_count", "overlap_time", "assistment_id",
+                     "problem_id", "end_time", "problem_type"],
         "min_rows": 100_000,
     },
 }
