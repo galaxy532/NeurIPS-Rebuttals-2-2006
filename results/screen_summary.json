@@ -1,0 +1,277 @@
+[
+  {
+    "dataset": "acsincome",
+    "n_used": 200000,
+    "n_total": 1664500,
+    "n_groups": 51,
+    "n_clusters": 200000,
+    "r_names": [
+      "SCHL",
+      "OCCP",
+      "COW",
+      "WKHP",
+      "AGEP"
+    ],
+    "s_names": [
+      "MAR",
+      "RELP",
+      "POBP"
+    ],
+    "group_name": "ST",
+    "loader_notes": {
+      "file": "acsincome_2018_all.csv.gz",
+      "rows_raw": 1664500,
+      "min_cell": 200,
+      "groups_before_min_cell": 51,
+      "groups_after_min_cell": 51,
+      "rows_dropped_by_min_cell": 0,
+      "smallest_surviving_cell": 962,
+      "frequency_encoded": [
+        "OCCP",
+        "POBP"
+      ],
+      "nominal_note": "MAR and RELP are small nominal codes left as integers; the screen's model is tree-based and does not assume an ordering."
+    },
+    "n_perm": 20,
+    "seed": 0,
+    "by_label": {
+      "0": {
+        "n": 126034,
+        "relational": {
+          "r2_pooled": 0.19678335694005208,
+          "r2_group_aware": 0.1980742578689224,
+          "delta_r2": 0.0012909009288703255,
+          "n_train": 88223,
+          "n_test": 37811
+        },
+        "level_and_relational": {
+          "r2_pooled": 0.19518894385114963,
+          "r2_group_aware": 0.2456695945048203,
+          "delta_r2": 0.05048065065367066,
+          "n_train": 88223,
+          "n_test": 37811
+        },
+        "level_only_delta": 0.049189749724800336,
+        "null_mean": -0.00031412284551710773,
+        "null_sd": 0.0003398085879642902,
+        "p_value": 0.047619047619047616,
+        "z": 4.723317276949168,
+        "passes": true
+      },
+      "1": {
+        "n": 73966,
+        "relational": {
+          "r2_pooled": 0.0638693124035435,
+          "r2_group_aware": 0.06582178213016228,
+          "delta_r2": 0.0019524697266187774,
+          "n_train": 51776,
+          "n_test": 22190
+        },
+        "level_and_relational": {
+          "r2_pooled": 0.06396692878928718,
+          "r2_group_aware": 0.09446623221015182,
+          "delta_r2": 0.03049930342086464,
+          "n_train": 51776,
+          "n_test": 22190
+        },
+        "level_only_delta": 0.028546833694245863,
+        "null_mean": -0.0003347621594309763,
+        "null_sd": 0.00043153870527238604,
+        "p_value": 0.047619047619047616,
+        "z": 5.3001778475607635,
+        "passes": true
+      }
+    },
+    "effect_size": 0.0016216853277445514,
+    "passes": true,
+    "seconds": 184.2
+  },
+  {
+    "dataset": "readmission",
+    "n_used": 62880,
+    "n_total": 62880,
+    "n_groups": 3,
+    "n_clusters": 62880,
+    "r_names": [
+      "number_inpatient",
+      "number_emergency",
+      "number_outpatient",
+      "number_diagnoses",
+      "n_diag_coded"
+    ],
+    "s_names": [
+      "time_in_hospital",
+      "num_lab_procedures",
+      "num_medications",
+      "num_procedures"
+    ],
+    "group_name": "admission_source_id",
+    "loader_notes": {
+      "file": "diabetic_data.csv",
+      "rows_raw": 101766,
+      "rows_after_first_encounter": 71518,
+      "encounters_dropped": 30248,
+      "source_17_decodes_to": "NULL",
+      "source_17_drop_justified": true,
+      "rows_dropped_source_17": 4949,
+      "positive_rate": 0.08817918250236596,
+      "min_cell": 200,
+      "groups_before_min_cell": 16,
+      "groups_after_min_cell": 3,
+      "rows_dropped_by_min_cell": 3689,
+      "smallest_surviving_cell": 216
+    },
+    "n_perm": 20,
+    "seed": 0,
+    "by_label": {
+      "0": {
+        "n": 57332,
+        "relational": {
+          "r2_pooled": 0.046830409603801665,
+          "r2_group_aware": 0.04685879583648642,
+          "delta_r2": 2.838623268475171e-05,
+          "n_train": 40132,
+          "n_test": 17200
+        },
+        "level_and_relational": {
+          "r2_pooled": 0.04225064881039381,
+          "r2_group_aware": 0.08967855093296878,
+          "delta_r2": 0.04742790212257497,
+          "n_train": 40132,
+          "n_test": 17200
+        },
+        "level_only_delta": 0.04739951588989022,
+        "null_mean": -2.9355149023996273e-06,
+        "null_sd": 9.263155525708704e-05,
+        "p_value": 0.47619047619047616,
+        "z": 0.33813258883780833,
+        "passes": false
+      },
+      "1": {
+        "n": 5548,
+        "relational": {
+          "r2_pooled": 0.017922052524856513,
+          "r2_group_aware": 0.018280837294060742,
+          "delta_r2": 0.00035878476920422897,
+          "n_train": 3883,
+          "n_test": 1665
+        },
+        "level_and_relational": {
+          "r2_pooled": 0.024508992464494395,
+          "r2_group_aware": 0.05026787159788282,
+          "delta_r2": 0.025758879133388424,
+          "n_train": 3883,
+          "n_test": 1665
+        },
+        "level_only_delta": 0.025400094364184195,
+        "null_mean": 5.484631863058032e-05,
+        "null_sd": 0.000621750039039,
+        "p_value": 0.42857142857142855,
+        "z": 0.4888434764610988,
+        "passes": false
+      }
+    },
+    "effect_size": 0.00019358550094449034,
+    "passes": false,
+    "seconds": 124.2
+  },
+  {
+    "dataset": "assistments",
+    "n_used": 197295,
+    "n_total": 2172893,
+    "n_groups": 147,
+    "n_clusters": 2209,
+    "r_names": [
+      "n_prior_skill",
+      "rate_prior_skill",
+      "rate_prior_all"
+    ],
+    "s_names": [
+      "mean_prior_ms",
+      "mean_prior_hints"
+    ],
+    "group_name": "school_id",
+    "loader_notes": {
+      "file": "2012-2013-data-with-predictions-4-final.csv",
+      "rows_raw": 6123270,
+      "rows_after_skill_filter": 2711813,
+      "rows_after_original_filter": 2623624,
+      "correct_values_seen": [
+        0.0,
+        0.25,
+        0.5,
+        0.6,
+        0.65,
+        0.75,
+        0.95,
+        1.0
+      ],
+      "rows_dropped_unparseable_time": 49161,
+      "rows_dropped_no_history": 373853,
+      "rows_after_history": 2200610,
+      "log1p_applied": [
+        "mean_prior_ms"
+      ],
+      "min_cell": 200,
+      "groups_before_min_cell": 359,
+      "groups_after_min_cell": 149,
+      "rows_dropped_by_min_cell": 27717,
+      "smallest_surviving_cell": 200,
+      "positive_rate": 0.7133195237869513,
+      "n_students": 24006
+    },
+    "n_perm": 20,
+    "seed": 0,
+    "by_label": {
+      "0": {
+        "n": 56966,
+        "relational": {
+          "r2_pooled": 0.13805081335962305,
+          "r2_group_aware": 0.09178636060040402,
+          "delta_r2": -0.04626445275921903,
+          "n_train": 39161,
+          "n_test": 17805
+        },
+        "level_and_relational": {
+          "r2_pooled": 0.16403978597983565,
+          "r2_group_aware": 0.2237281842975415,
+          "delta_r2": 0.05968839831770584,
+          "n_train": 39161,
+          "n_test": 17805
+        },
+        "level_only_delta": 0.10595285107692487,
+        "null_mean": -0.11338023148485106,
+        "null_sd": 0.04500563793618339,
+        "p_value": 0.047619047619047616,
+        "z": 1.4912749113966597,
+        "passes": false
+      },
+      "1": {
+        "n": 140329,
+        "relational": {
+          "r2_pooled": 0.18501947305049493,
+          "r2_group_aware": 0.15878448295120495,
+          "delta_r2": -0.02623499009928998,
+          "n_train": 96118,
+          "n_test": 44211
+        },
+        "level_and_relational": {
+          "r2_pooled": 0.16087624314301352,
+          "r2_group_aware": 0.3268854742901317,
+          "delta_r2": 0.16600923114711819,
+          "n_train": 96118,
+          "n_test": 44211
+        },
+        "level_only_delta": 0.19224422124640816,
+        "null_mean": -0.10477629639863598,
+        "null_sd": 0.021617271770462836,
+        "p_value": 0.047619047619047616,
+        "z": 3.633266359109311,
+        "passes": false
+      }
+    },
+    "effect_size": -0.036249721429254506,
+    "passes": false,
+    "seconds": 168.1
+  }
+]
