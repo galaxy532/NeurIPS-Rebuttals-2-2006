@@ -1,1 +1,1487 @@
-PLACEHOLDER - generated during offline testing against a fake data tree. Overwritten by the first real run.
+{
+  "data_root": "/notebooks/spurious_rebuttal_data",
+  "tabular": [
+    {
+      "path": "/notebooks/spurious_rebuttal_data/acsincome/acsincome_2018_CA-NY-TX.csv.gz",
+      "name": "acsincome_2018_CA-NY-TX.csv.gz",
+      "parent": "acsincome",
+      "size_mb": 3.49,
+      "read": "utf-8",
+      "rows_total": 434610,
+      "rows_sniffed": 20000,
+      "n_columns": 12,
+      "columns": [
+        "AGEP",
+        "COW",
+        "SCHL",
+        "MAR",
+        "OCCP",
+        "POBP",
+        "RELP",
+        "WKHP",
+        "SEX",
+        "RAC1P",
+        "ST",
+        "y"
+      ],
+      "dtypes": {
+        "AGEP": "float64",
+        "COW": "float64",
+        "SCHL": "float64",
+        "MAR": "float64",
+        "OCCP": "float64",
+        "POBP": "float64",
+        "RELP": "float64",
+        "WKHP": "float64",
+        "SEX": "float64",
+        "RAC1P": "float64",
+        "ST": "int64",
+        "y": "int64"
+      },
+      "null_frac": {
+        "AGEP": 0.0,
+        "COW": 0.0,
+        "SCHL": 0.0,
+        "MAR": 0.0,
+        "OCCP": 0.0,
+        "POBP": 0.0,
+        "RELP": 0.0,
+        "WKHP": 0.0,
+        "SEX": 0.0,
+        "RAC1P": 0.0,
+        "ST": 0.0,
+        "y": 0.0
+      },
+      "n_unique_in_sniff": {
+        "AGEP": 74,
+        "COW": 8,
+        "SCHL": 24,
+        "MAR": 5,
+        "OCCP": 507,
+        "POBP": 190,
+        "RELP": 17,
+        "WKHP": 93,
+        "SEX": 2,
+        "RAC1P": 8,
+        "ST": 1,
+        "y": 2
+      },
+      "sample_values": {
+        "AGEP": [
+          "30.0",
+          "21.0",
+          "65.0",
+          "33.0",
+          "18.0"
+        ],
+        "COW": [
+          "6.0",
+          "4.0",
+          "2.0",
+          "1.0",
+          "5.0"
+        ],
+        "SCHL": [
+          "14.0",
+          "16.0",
+          "22.0",
+          "19.0",
+          "15.0"
+        ],
+        "MAR": [
+          "1.0",
+          "5.0",
+          "3.0",
+          "4.0",
+          "2.0"
+        ],
+        "OCCP": [
+          "9610.0",
+          "1970.0",
+          "2040.0",
+          "1021.0",
+          "4720.0"
+        ],
+        "POBP": [
+          "6.0",
+          "36.0",
+          "17.0",
+          "18.0",
+          "8.0"
+        ],
+        "RELP": [
+          "16.0",
+          "17.0",
+          "0.0",
+          "13.0",
+          "2.0"
+        ],
+        "WKHP": [
+          "40.0",
+          "20.0",
+          "8.0",
+          "18.0",
+          "50.0"
+        ],
+        "SEX": [
+          "1.0",
+          "2.0"
+        ],
+        "RAC1P": [
+          "8.0",
+          "1.0",
+          "9.0",
+          "2.0",
+          "3.0"
+        ],
+        "ST": [
+          "6"
+        ],
+        "y": [
+          "0",
+          "1"
+        ]
+      }
+    },
+    {
+      "path": "/notebooks/spurious_rebuttal_data/acsincome/acsincome_2018_all.csv.gz",
+      "name": "acsincome_2018_all.csv.gz",
+      "parent": "acsincome",
+      "size_mb": 13.12,
+      "read": "utf-8",
+      "rows_total": 1664500,
+      "rows_sniffed": 20000,
+      "n_columns": 12,
+      "columns": [
+        "AGEP",
+        "COW",
+        "SCHL",
+        "MAR",
+        "OCCP",
+        "POBP",
+        "RELP",
+        "WKHP",
+        "SEX",
+        "RAC1P",
+        "ST",
+        "y"
+      ],
+      "dtypes": {
+        "AGEP": "float64",
+        "COW": "float64",
+        "SCHL": "float64",
+        "MAR": "float64",
+        "OCCP": "float64",
+        "POBP": "float64",
+        "RELP": "float64",
+        "WKHP": "float64",
+        "SEX": "float64",
+        "RAC1P": "float64",
+        "ST": "int64",
+        "y": "int64"
+      },
+      "null_frac": {
+        "AGEP": 0.0,
+        "COW": 0.0,
+        "SCHL": 0.0,
+        "MAR": 0.0,
+        "OCCP": 0.0,
+        "POBP": 0.0,
+        "RELP": 0.0,
+        "WKHP": 0.0,
+        "SEX": 0.0,
+        "RAC1P": 0.0,
+        "ST": 0.0,
+        "y": 0.0
+      },
+      "n_unique_in_sniff": {
+        "AGEP": 74,
+        "COW": 8,
+        "SCHL": 23,
+        "MAR": 5,
+        "OCCP": 503,
+        "POBP": 149,
+        "RELP": 18,
+        "WKHP": 87,
+        "SEX": 2,
+        "RAC1P": 8,
+        "ST": 1,
+        "y": 2
+      },
+      "sample_values": {
+        "AGEP": [
+          "18.0",
+          "53.0",
+          "41.0",
+          "21.0",
+          "37.0"
+        ],
+        "COW": [
+          "1.0",
+          "5.0",
+          "6.0",
+          "7.0",
+          "2.0"
+        ],
+        "SCHL": [
+          "18.0",
+          "17.0",
+          "16.0",
+          "19.0",
+          "20.0"
+        ],
+        "MAR": [
+          "5.0",
+          "4.0",
+          "3.0",
+          "1.0",
+          "2.0"
+        ],
+        "OCCP": [
+          "4720.0",
+          "3605.0",
+          "7330.0",
+          "2722.0",
+          "3870.0"
+        ],
+        "POBP": [
+          "13.0",
+          "18.0",
+          "1.0",
+          "12.0",
+          "110.0"
+        ],
+        "RELP": [
+          "17.0",
+          "16.0",
+          "0.0",
+          "1.0",
+          "2.0"
+        ],
+        "WKHP": [
+          "21.0",
+          "40.0",
+          "2.0",
+          "50.0",
+          "35.0"
+        ],
+        "SEX": [
+          "2.0",
+          "1.0"
+        ],
+        "RAC1P": [
+          "2.0",
+          "1.0",
+          "9.0",
+          "6.0",
+          "5.0"
+        ],
+        "ST": [
+          "1"
+        ],
+        "y": [
+          "0",
+          "1"
+        ]
+      }
+    },
+    {
+      "path": "/notebooks/spurious_rebuttal_data/assistments/2012-2013-data-with-predictions-4-final.csv",
+      "name": "2012-2013-data-with-predictions-4-final.csv",
+      "parent": "assistments",
+      "size_mb": 3009.49,
+      "read": "utf-8",
+      "rows_total": 82773406,
+      "rows_sniffed": 20000,
+      "n_columns": 35,
+      "columns": [
+        "problem_log_id",
+        "skill",
+        "problem_id",
+        "user_id",
+        "assignment_id",
+        "assistment_id",
+        "start_time",
+        "end_time",
+        "problem_type",
+        "original",
+        "correct",
+        "bottom_hint",
+        "hint_count",
+        "actions",
+        "attempt_count",
+        "ms_first_response",
+        "tutor_mode",
+        "sequence_id",
+        "student_class_id",
+        "position",
+        "type",
+        "base_sequence_id",
+        "skill_id",
+        "teacher_id",
+        "school_id",
+        "overlap_time",
+        "template_id",
+        "answer_id",
+        "answer_text",
+        "first_action",
+        "problemlogid",
+        "Average_confidence(FRUSTRATED)",
+        "Average_confidence(CONFUSED)",
+        "Average_confidence(CONCENTRATING)",
+        "Average_confidence(BORED)"
+      ],
+      "dtypes": {
+        "problem_log_id": "int64",
+        "skill": "str",
+        "problem_id": "int64",
+        "user_id": "int64",
+        "assignment_id": "int64",
+        "assistment_id": "int64",
+        "start_time": "str",
+        "end_time": "str",
+        "problem_type": "str",
+        "original": "int64",
+        "correct": "float64",
+        "bottom_hint": "float64",
+        "hint_count": "int64",
+        "actions": "str",
+        "attempt_count": "int64",
+        "ms_first_response": "int64",
+        "tutor_mode": "str",
+        "sequence_id": "int64",
+        "student_class_id": "int64",
+        "position": "int64",
+        "type": "str",
+        "base_sequence_id": "int64",
+        "skill_id": "float64",
+        "teacher_id": "int64",
+        "school_id": "int64",
+        "overlap_time": "int64",
+        "template_id": "int64",
+        "answer_id": "float64",
+        "answer_text": "str",
+        "first_action": "int64",
+        "problemlogid": "int64",
+        "Average_confidence(FRUSTRATED)": "float64",
+        "Average_confidence(CONFUSED)": "float64",
+        "Average_confidence(CONCENTRATING)": "float64",
+        "Average_confidence(BORED)": "float64"
+      },
+      "null_frac": {
+        "problem_log_id": 0.0,
+        "skill": 0.5584,
+        "problem_id": 0.0,
+        "user_id": 0.0,
+        "assignment_id": 0.0,
+        "assistment_id": 0.0,
+        "start_time": 0.0,
+        "end_time": 0.0,
+        "problem_type": 0.0,
+        "original": 0.0,
+        "correct": 0.0,
+        "bottom_hint": 0.01,
+        "hint_count": 0.0,
+        "actions": 0.0,
+        "attempt_count": 0.0,
+        "ms_first_response": 0.0,
+        "tutor_mode": 0.0,
+        "sequence_id": 0.0,
+        "student_class_id": 0.0,
+        "position": 0.0,
+        "type": 0.0,
+        "base_sequence_id": 0.0,
+        "skill_id": 0.5443,
+        "teacher_id": 0.0,
+        "school_id": 0.0,
+        "overlap_time": 0.0,
+        "template_id": 0.0,
+        "answer_id": 0.9987,
+        "answer_text": 0.048,
+        "first_action": 0.0,
+        "problemlogid": 0.0,
+        "Average_confidence(FRUSTRATED)": 0.0,
+        "Average_confidence(CONFUSED)": 0.0,
+        "Average_confidence(CONCENTRATING)": 0.0,
+        "Average_confidence(BORED)": 0.0
+      },
+      "n_unique_in_sniff": {
+        "problem_log_id": 20000,
+        "skill": 172,
+        "problem_id": 15400,
+        "user_id": 10559,
+        "assignment_id": 11131,
+        "assistment_id": 14516,
+        "start_time": 19977,
+        "end_time": 20000,
+        "problem_type": 6,
+        "original": 2,
+        "correct": 5,
+        "bottom_hint": 2,
+        "hint_count": 9,
+        "actions": 20000,
+        "attempt_count": 26,
+        "ms_first_response": 17323,
+        "tutor_mode": 2,
+        "sequence_id": 5647,
+        "student_class_id": 1386,
+        "position": 882,
+        "type": 6,
+        "base_sequence_id": 4935,
+        "skill_id": 204,
+        "teacher_id": 730,
+        "school_id": 381,
+        "overlap_time": 17331,
+        "template_id": 9575,
+        "answer_id": 26,
+        "answer_text": 6871,
+        "first_action": 3,
+        "problemlogid": 20000,
+        "Average_confidence(FRUSTRATED)": 87,
+        "Average_confidence(CONFUSED)": 151,
+        "Average_confidence(CONCENTRATING)": 76,
+        "Average_confidence(BORED)": 518
+      },
+      "sample_values": {
+        "problem_log_id": [
+          "137792159",
+          "138083797",
+          "142332619",
+          "145939397",
+          "137111284"
+        ],
+        "skill": [
+          "Rounding",
+          "Multiplication and Division Integers",
+          "Proportion",
+          "Exponents",
+          "Equation Solving Two or Fewer Steps"
+        ],
+        "problem_id": [
+          "557460",
+          "365981",
+          "426415",
+          "86686",
+          "399669"
+        ],
+        "user_id": [
+          "61394",
+          "76592",
+          "77966",
+          "78401",
+          "78409"
+        ],
+        "assignment_id": [
+          "565736",
+          "573819",
+          "734130",
+          "821352",
+          "557216"
+        ],
+        "assistment_id": [
+          "341511",
+          "204043",
+          "247525",
+          "48081",
+          "227869"
+        ],
+        "start_time": [
+          "2012-09-28 15:11:27",
+          "2012-10-09 11:01:52",
+          "2013-03-07 10:53:20",
+          "2013-08-20 19:54:56",
+          "2012-09-10 17:20:10"
+        ],
+        "end_time": [
+          "2012-09-28 15:11:36.856",
+          "2012-10-09 11:02:13.182",
+          "2013-03-07 10:53:28.661",
+          "2013-08-20 19:55:21.753",
+          "2012-09-10 17:24:56.579"
+        ],
+        "problem_type": [
+          "choose_1",
+          "algebra",
+          "fill_in_1",
+          "rank",
+          "choose_n"
+        ],
+        "original": [
+          "1",
+          "0"
+        ],
+        "correct": [
+          "1.0",
+          "0.0",
+          "0.25",
+          "0.5",
+          "0.75"
+        ],
+        "bottom_hint": [
+          "0.0",
+          "1.0"
+        ],
+        "hint_count": [
+          "0",
+          "4",
+          "3",
+          "1",
+          "2"
+        ],
+        "actions": [
+          "--- \n- - start\n  - 1348859487561\n  - \"95",
+          "--- \n- - start\n  - 1349794912269\n  - \"62",
+          "--- \n- - start\n  - 1362671600405\n  - \"74",
+          "--- \n- - start\n  - 1377042896503\n  - \"73",
+          "--- \n- - start\n  - 1347312010563\n  - \"69"
+        ],
+        "attempt_count": [
+          "1",
+          "2",
+          "13",
+          "3",
+          "4"
+        ],
+        "ms_first_response": [
+          "9852",
+          "21175",
+          "8645",
+          "25728",
+          "286578"
+        ],
+        "tutor_mode": [
+          "tutor",
+          "test"
+        ],
+        "sequence_id": [
+          "55482",
+          "34221",
+          "39601",
+          "6912",
+          "37143"
+        ],
+        "student_class_id": [
+          "23643",
+          "22967",
+          "26303",
+          "21696",
+          "26036"
+        ],
+        "position": [
+          "4",
+          "5",
+          "58",
+          "21",
+          "3"
+        ],
+        "type": [
+          "LinearSection",
+          "MasterySection",
+          "RandomChildOrderSection",
+          "RandomIterateSection",
+          "PlacementsSection"
+        ],
+        "base_sequence_id": [
+          "55482",
+          "34221",
+          "39601",
+          "6912",
+          "37143"
+        ],
+        "skill_id": [
+          "54.0",
+          "279.0",
+          "79.0",
+          "86.0",
+          "311.0"
+        ],
+        "teacher_id": [
+          "53472",
+          "47424",
+          "152676",
+          "208301",
+          "49343"
+        ],
+        "school_id": [
+          "5048",
+          "7561",
+          "4986",
+          "5056",
+          "76"
+        ],
+        "overlap_time": [
+          "9852",
+          "21175",
+          "8645",
+          "25728",
+          "286578"
+        ],
+        "template_id": [
+          "341511",
+          "204043",
+          "247525",
+          "46362",
+          "227869"
+        ],
+        "answer_id": [
+          "57641.0",
+          "495318.0",
+          "214815.0",
+          "1133329.0",
+          "943894.0"
+        ],
+        "answer_text": [
+          "she",
+          "74.29",
+          "00",
+          "3.8",
+          "C (wr - 1)(wr + 1)"
+        ],
+        "first_action": [
+          "0",
+          "1",
+          "2"
+        ],
+        "problemlogid": [
+          "137792159",
+          "138083797",
+          "142332619",
+          "145939397",
+          "137111284"
+        ],
+        "Average_confidence(FRUSTRATED)": [
+          "0.361323",
+          "0.775",
+          "0.805195",
+          "0.5092803333333333",
+          "0.472291"
+        ],
+        "Average_confidence(CONFUSED)": [
+          "0.0",
+          "0.4558825",
+          "0.96875",
+          "0.911765",
+          "0.978947"
+        ],
+        "Average_confidence(CONCENTRATING)": [
+          "0.336529",
+          "0.766925",
+          "0.4594992857142857",
+          "0.6808458",
+          "0.211268"
+        ],
+        "Average_confidence(BORED)": [
+          "0.0",
+          "0.442968",
+          "0.912281",
+          "0.051613",
+          "0.2939408571428571"
+        ]
+      }
+    },
+    {
+      "path": "/notebooks/spurious_rebuttal_data/readmission/IDS_mapping.csv",
+      "name": "IDS_mapping.csv",
+      "parent": "readmission",
+      "size_mb": 0.0,
+      "read": "utf-8",
+      "rows_total": 67,
+      "rows_sniffed": 67,
+      "n_columns": 2,
+      "columns": [
+        "admission_type_id",
+        "description"
+      ],
+      "dtypes": {
+        "admission_type_id": "str",
+        "description": "str"
+      },
+      "null_frac": {
+        "admission_type_id": 0.0299,
+        "description": 0.0746
+      },
+      "n_unique_in_sniff": {
+        "admission_type_id": 32,
+        "description": 58
+      },
+      "sample_values": {
+        "admission_type_id": [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5"
+        ],
+        "description": [
+          "Emergency",
+          "Urgent",
+          "Elective",
+          "Newborn",
+          "Not Available"
+        ]
+      }
+    },
+    {
+      "path": "/notebooks/spurious_rebuttal_data/readmission/diabetic_data.csv",
+      "name": "diabetic_data.csv",
+      "parent": "readmission",
+      "size_mb": 19.16,
+      "read": "utf-8",
+      "rows_total": 101766,
+      "rows_sniffed": 20000,
+      "n_columns": 50,
+      "columns": [
+        "encounter_id",
+        "patient_nbr",
+        "race",
+        "gender",
+        "age",
+        "weight",
+        "admission_type_id",
+        "discharge_disposition_id",
+        "admission_source_id",
+        "time_in_hospital",
+        "payer_code",
+        "medical_specialty",
+        "num_lab_procedures",
+        "num_procedures",
+        "num_medications",
+        "number_outpatient",
+        "number_emergency",
+        "number_inpatient",
+        "diag_1",
+        "diag_2",
+        "diag_3",
+        "number_diagnoses",
+        "max_glu_serum",
+        "A1Cresult",
+        "metformin",
+        "repaglinide",
+        "nateglinide",
+        "chlorpropamide",
+        "glimepiride",
+        "acetohexamide",
+        "glipizide",
+        "glyburide",
+        "tolbutamide",
+        "pioglitazone",
+        "rosiglitazone",
+        "acarbose",
+        "miglitol",
+        "troglitazone",
+        "tolazamide",
+        "examide",
+        "citoglipton",
+        "insulin",
+        "glyburide-metformin",
+        "glipizide-metformin",
+        "glimepiride-pioglitazone",
+        "metformin-rosiglitazone",
+        "metformin-pioglitazone",
+        "change",
+        "diabetesMed",
+        "readmitted"
+      ],
+      "dtypes": {
+        "encounter_id": "int64",
+        "patient_nbr": "int64",
+        "race": "str",
+        "gender": "str",
+        "age": "str",
+        "weight": "str",
+        "admission_type_id": "int64",
+        "discharge_disposition_id": "int64",
+        "admission_source_id": "int64",
+        "time_in_hospital": "int64",
+        "payer_code": "str",
+        "medical_specialty": "str",
+        "num_lab_procedures": "int64",
+        "num_procedures": "int64",
+        "num_medications": "int64",
+        "number_outpatient": "int64",
+        "number_emergency": "int64",
+        "number_inpatient": "int64",
+        "diag_1": "str",
+        "diag_2": "str",
+        "diag_3": "str",
+        "number_diagnoses": "int64",
+        "max_glu_serum": "str",
+        "A1Cresult": "str",
+        "metformin": "str",
+        "repaglinide": "str",
+        "nateglinide": "str",
+        "chlorpropamide": "str",
+        "glimepiride": "str",
+        "acetohexamide": "str",
+        "glipizide": "str",
+        "glyburide": "str",
+        "tolbutamide": "str",
+        "pioglitazone": "str",
+        "rosiglitazone": "str",
+        "acarbose": "str",
+        "miglitol": "str",
+        "troglitazone": "str",
+        "tolazamide": "str",
+        "examide": "str",
+        "citoglipton": "str",
+        "insulin": "str",
+        "glyburide-metformin": "str",
+        "glipizide-metformin": "str",
+        "glimepiride-pioglitazone": "str",
+        "metformin-rosiglitazone": "str",
+        "metformin-pioglitazone": "str",
+        "change": "str",
+        "diabetesMed": "str",
+        "readmitted": "str"
+      },
+      "null_frac": {
+        "encounter_id": 0.0,
+        "patient_nbr": 0.0,
+        "race": 0.0,
+        "gender": 0.0,
+        "age": 0.0,
+        "weight": 0.0,
+        "admission_type_id": 0.0,
+        "discharge_disposition_id": 0.0,
+        "admission_source_id": 0.0,
+        "time_in_hospital": 0.0,
+        "payer_code": 0.0,
+        "medical_specialty": 0.0,
+        "num_lab_procedures": 0.0,
+        "num_procedures": 0.0,
+        "num_medications": 0.0,
+        "number_outpatient": 0.0,
+        "number_emergency": 0.0,
+        "number_inpatient": 0.0,
+        "diag_1": 0.0,
+        "diag_2": 0.0,
+        "diag_3": 0.0,
+        "number_diagnoses": 0.0,
+        "max_glu_serum": 0.8962,
+        "A1Cresult": 0.8149,
+        "metformin": 0.0,
+        "repaglinide": 0.0,
+        "nateglinide": 0.0,
+        "chlorpropamide": 0.0,
+        "glimepiride": 0.0,
+        "acetohexamide": 0.0,
+        "glipizide": 0.0,
+        "glyburide": 0.0,
+        "tolbutamide": 0.0,
+        "pioglitazone": 0.0,
+        "rosiglitazone": 0.0,
+        "acarbose": 0.0,
+        "miglitol": 0.0,
+        "troglitazone": 0.0,
+        "tolazamide": 0.0,
+        "examide": 0.0,
+        "citoglipton": 0.0,
+        "insulin": 0.0,
+        "glyburide-metformin": 0.0,
+        "glipizide-metformin": 0.0,
+        "glimepiride-pioglitazone": 0.0,
+        "metformin-rosiglitazone": 0.0,
+        "metformin-pioglitazone": 0.0,
+        "change": 0.0,
+        "diabetesMed": 0.0,
+        "readmitted": 0.0
+      },
+      "n_unique_in_sniff": {
+        "encounter_id": 20000,
+        "patient_nbr": 15262,
+        "race": 6,
+        "gender": 2,
+        "age": 10,
+        "weight": 10,
+        "admission_type_id": 7,
+        "discharge_disposition_id": 20,
+        "admission_source_id": 10,
+        "time_in_hospital": 14,
+        "payer_code": 1,
+        "medical_specialty": 52,
+        "num_lab_procedures": 109,
+        "num_procedures": 7,
+        "num_medications": 62,
+        "number_outpatient": 15,
+        "number_emergency": 12,
+        "number_inpatient": 14,
+        "diag_1": 538,
+        "diag_2": 509,
+        "diag_3": 566,
+        "number_diagnoses": 9,
+        "max_glu_serum": 3,
+        "A1Cresult": 3,
+        "metformin": 4,
+        "repaglinide": 4,
+        "nateglinide": 2,
+        "chlorpropamide": 4,
+        "glimepiride": 4,
+        "acetohexamide": 1,
+        "glipizide": 4,
+        "glyburide": 4,
+        "tolbutamide": 2,
+        "pioglitazone": 4,
+        "rosiglitazone": 4,
+        "acarbose": 3,
+        "miglitol": 2,
+        "troglitazone": 2,
+        "tolazamide": 3,
+        "examide": 1,
+        "citoglipton": 1,
+        "insulin": 4,
+        "glyburide-metformin": 4,
+        "glipizide-metformin": 1,
+        "glimepiride-pioglitazone": 1,
+        "metformin-rosiglitazone": 1,
+        "metformin-pioglitazone": 1,
+        "change": 2,
+        "diabetesMed": 2,
+        "readmitted": 3
+      },
+      "sample_values": {
+        "encounter_id": [
+          "2278392",
+          "149190",
+          "64410",
+          "500364",
+          "16680"
+        ],
+        "patient_nbr": [
+          "8222157",
+          "55629189",
+          "86047875",
+          "82442376",
+          "42519267"
+        ],
+        "race": [
+          "Caucasian",
+          "AfricanAmerican",
+          "?",
+          "Other",
+          "Asian"
+        ],
+        "gender": [
+          "Female",
+          "Male"
+        ],
+        "age": [
+          "[0-10)",
+          "[10-20)",
+          "[20-30)",
+          "[30-40)",
+          "[40-50)"
+        ],
+        "weight": [
+          "?",
+          "[75-100)",
+          "[50-75)",
+          "[0-25)",
+          "[100-125)"
+        ],
+        "admission_type_id": [
+          "6",
+          "1",
+          "2",
+          "3",
+          "4"
+        ],
+        "discharge_disposition_id": [
+          "25",
+          "1",
+          "3",
+          "6",
+          "2"
+        ],
+        "admission_source_id": [
+          "1",
+          "7",
+          "2",
+          "4",
+          "5"
+        ],
+        "time_in_hospital": [
+          "1",
+          "3",
+          "2",
+          "4",
+          "5"
+        ],
+        "payer_code": [
+          "?"
+        ],
+        "medical_specialty": [
+          "Pediatrics-Endocrinology",
+          "?",
+          "InternalMedicine",
+          "Family/GeneralPractice",
+          "Cardiology"
+        ],
+        "num_lab_procedures": [
+          "41",
+          "59",
+          "11",
+          "44",
+          "51"
+        ],
+        "num_procedures": [
+          "0",
+          "5",
+          "1",
+          "6",
+          "2"
+        ],
+        "num_medications": [
+          "1",
+          "18",
+          "13",
+          "16",
+          "8"
+        ],
+        "number_outpatient": [
+          "0",
+          "2",
+          "1",
+          "5",
+          "7"
+        ],
+        "number_emergency": [
+          "0",
+          "1",
+          "2",
+          "4",
+          "3"
+        ],
+        "number_inpatient": [
+          "0",
+          "1",
+          "2",
+          "3",
+          "6"
+        ],
+        "diag_1": [
+          "250.83",
+          "276",
+          "648",
+          "8",
+          "197"
+        ],
+        "diag_2": [
+          "?",
+          "250.01",
+          "250",
+          "250.43",
+          "157"
+        ],
+        "diag_3": [
+          "?",
+          "255",
+          "V27",
+          "403",
+          "250"
+        ],
+        "number_diagnoses": [
+          "1",
+          "9",
+          "6",
+          "7",
+          "5"
+        ],
+        "max_glu_serum": [
+          ">300",
+          "Norm",
+          ">200"
+        ],
+        "A1Cresult": [
+          ">7",
+          ">8",
+          "Norm"
+        ],
+        "metformin": [
+          "No",
+          "Steady",
+          "Up",
+          "Down"
+        ],
+        "repaglinide": [
+          "No",
+          "Up",
+          "Steady",
+          "Down"
+        ],
+        "nateglinide": [
+          "No",
+          "Steady"
+        ],
+        "chlorpropamide": [
+          "No",
+          "Steady",
+          "Down",
+          "Up"
+        ],
+        "glimepiride": [
+          "No",
+          "Steady",
+          "Down",
+          "Up"
+        ],
+        "acetohexamide": [
+          "No"
+        ],
+        "glipizide": [
+          "No",
+          "Steady",
+          "Up",
+          "Down"
+        ],
+        "glyburide": [
+          "No",
+          "Steady",
+          "Up",
+          "Down"
+        ],
+        "tolbutamide": [
+          "No",
+          "Steady"
+        ],
+        "pioglitazone": [
+          "No",
+          "Steady",
+          "Up",
+          "Down"
+        ],
+        "rosiglitazone": [
+          "No",
+          "Steady",
+          "Up",
+          "Down"
+        ],
+        "acarbose": [
+          "No",
+          "Steady",
+          "Up"
+        ],
+        "miglitol": [
+          "No",
+          "Steady"
+        ],
+        "troglitazone": [
+          "No",
+          "Steady"
+        ],
+        "tolazamide": [
+          "No",
+          "Steady",
+          "Up"
+        ],
+        "examide": [
+          "No"
+        ],
+        "citoglipton": [
+          "No"
+        ],
+        "insulin": [
+          "No",
+          "Up",
+          "Steady",
+          "Down"
+        ],
+        "glyburide-metformin": [
+          "No",
+          "Steady",
+          "Down",
+          "Up"
+        ],
+        "glipizide-metformin": [
+          "No"
+        ],
+        "glimepiride-pioglitazone": [
+          "No"
+        ],
+        "metformin-rosiglitazone": [
+          "No"
+        ],
+        "metformin-pioglitazone": [
+          "No"
+        ],
+        "change": [
+          "No",
+          "Ch"
+        ],
+        "diabetesMed": [
+          "No",
+          "Yes"
+        ],
+        "readmitted": [
+          "NO",
+          ">30",
+          "<30"
+        ]
+      }
+    }
+  ],
+  "other_files": [
+    {
+      "path": "/notebooks/spurious_rebuttal_data/acs/2018/1-Year/psam_p01.csv",
+      "note": "raw PUMS cache, not audited",
+      "size_mb": 33.21
+    },
+    {
+      "path": "/notebooks/spurious_rebuttal_data/acs/2018/1-Year/psam_p02.csv",
+      "note": "raw PUMS cache, not audited",
+      "size_mb": 4.66
+    },
+    {
+      "path": "/notebooks/spurious_rebuttal_data/acs/2018/1-Year/psam_p04.csv",
+      "note": "raw PUMS cache, not audited",
+      "size_mb": 49.11
+    },
+    {
+      "path": "/notebooks/spurious_rebuttal_data/acs/2018/1-Year/psam_p05.csv",
+      "note": "raw PUMS cache, not audited",
+      "size_mb": 21.15
+    },
+    {
+      "path": "/notebooks/spurious_rebuttal_data/acs/2018/1-Year/psam_p06.csv",
+      "note": "raw PUMS cache, not audited",
+      "size_mb": 267.3
+    },
+    {
+      "path": "/notebooks/spurious_rebuttal_data/acs/2018/1-Year/psam_p08.csv",
+      "note": "raw PUMS cache, not audited",
+      "size_mb": 39.42
+    },
+    {
+      "path": "/notebooks/spurious_rebuttal_data/acs/2018/1-Year/psam_p09.csv",
+      "note": "raw PUMS cache, not audited",
+      "size_mb": 25.56
+    },
+    {
+      "path": "/notebooks/spurious_rebuttal_data/acs/2018/1-Year/psam_p10.csv",
+      "note": "raw PUMS cache, not audited",
+      "size_mb": 6.42
+    },
+    {
+      "path": "/notebooks/spurious_rebuttal_data/acs/2018/1-Year/psam_p12.csv",
+      "note": "raw PUMS cache, not audited",
+      "size_mb": 142.29
+    },
+    {
+      "path": "/notebooks/spurious_rebuttal_data/acs/2018/1-Year/psam_p13.csv",
+      "note": "raw PUMS cache, not audited",
+      "size_mb": 70.58
+    },
+    {
+      "path": "/notebooks/spurious_rebuttal_data/acs/2018/1-Year/psam_p15.csv",
+      "note": "raw PUMS cache, not audited",
+      "size_mb": 10.1
+    },
+    {
+      "path": "/notebooks/spurious_rebuttal_data/acs/2018/1-Year/psam_p16.csv",
+      "note": "raw PUMS cache, not audited",
+      "size_mb": 11.66
+    },
+    {
+      "path": "/notebooks/spurious_rebuttal_data/acs/2018/1-Year/psam_p17.csv",
+      "note": "raw PUMS cache, not audited",
+      "size_mb": 88.63
+    },
+    {
+      "path": "/notebooks/spurious_rebuttal_data/acs/2018/1-Year/psam_p18.csv",
+      "note": "raw PUMS cache, not audited",
+      "size_mb": 47.25
+    },
+    {
+      "path": "/notebooks/spurious_rebuttal_data/acs/2018/1-Year/psam_p19.csv",
+      "note": "raw PUMS cache, not audited",
+      "size_mb": 22.51
+    },
+    {
+      "path": "/notebooks/spurious_rebuttal_data/acs/2018/1-Year/psam_p20.csv",
+      "note": "raw PUMS cache, not audited",
+      "size_mb": 20.63
+    },
+    {
+      "path": "/notebooks/spurious_rebuttal_data/acs/2018/1-Year/psam_p21.csv",
+      "note": "raw PUMS cache, not audited",
+      "size_mb": 31.68
+    },
+    {
+      "path": "/notebooks/spurious_rebuttal_data/acs/2018/1-Year/psam_p22.csv",
+      "note": "raw PUMS cache, not audited",
+      "size_mb": 30.42
+    },
+    {
+      "path": "/notebooks/spurious_rebuttal_data/acs/2018/1-Year/psam_p23.csv",
+      "note": "raw PUMS cache, not audited",
+      "size_mb": 9.28
+    },
+    {
+      "path": "/notebooks/spurious_rebuttal_data/acs/2018/1-Year/psam_p24.csv",
+      "note": "raw PUMS cache, not audited",
+      "size_mb": 42.22
+    },
+    {
+      "path": "/notebooks/spurious_rebuttal_data/acs/2018/1-Year/psam_p25.csv",
+      "note": "raw PUMS cache, not audited",
+      "size_mb": 49.5
+    },
+    {
+      "path": "/notebooks/spurious_rebuttal_data/acs/2018/1-Year/psam_p26.csv",
+      "note": "raw PUMS cache, not audited",
+      "size_mb": 69.44
+    },
+    {
+      "path": "/notebooks/spurious_rebuttal_data/acs/2018/1-Year/psam_p27.csv",
+      "note": "raw PUMS cache, not audited",
+      "size_mb": 38.78
+    },
+    {
+      "path": "/notebooks/spurious_rebuttal_data/acs/2018/1-Year/psam_p28.csv",
+      "note": "raw PUMS cache, not audited",
+      "size_mb": 20.23
+    },
+    {
+      "path": "/notebooks/spurious_rebuttal_data/acs/2018/1-Year/psam_p29.csv",
+      "note": "raw PUMS cache, not audited",
+      "size_mb": 43.5
+    },
+    {
+      "path": "/notebooks/spurious_rebuttal_data/acs/2018/1-Year/psam_p30.csv",
+      "note": "raw PUMS cache, not audited",
+      "size_mb": 7.22
+    },
+    {
+      "path": "/notebooks/spurious_rebuttal_data/acs/2018/1-Year/psam_p31.csv",
+      "note": "raw PUMS cache, not audited",
+      "size_mb": 13.59
+    },
+    {
+      "path": "/notebooks/spurious_rebuttal_data/acs/2018/1-Year/psam_p32.csv",
+      "note": "raw PUMS cache, not audited",
+      "size_mb": 20.4
+    },
+    {
+      "path": "/notebooks/spurious_rebuttal_data/acs/2018/1-Year/psam_p33.csv",
+      "note": "raw PUMS cache, not audited",
+      "size_mb": 9.7
+    },
+    {
+      "path": "/notebooks/spurious_rebuttal_data/acs/2018/1-Year/psam_p34.csv",
+      "note": "raw PUMS cache, not audited",
+      "size_mb": 62.43
+    },
+    {
+      "path": "/notebooks/spurious_rebuttal_data/acs/2018/1-Year/psam_p35.csv",
+      "note": "raw PUMS cache, not audited",
+      "size_mb": 13.44
+    },
+    {
+      "path": "/notebooks/spurious_rebuttal_data/acs/2018/1-Year/psam_p36.csv",
+      "note": "raw PUMS cache, not audited",
+      "size_mb": 138.18
+    },
+    {
+      "path": "/notebooks/spurious_rebuttal_data/acs/2018/1-Year/psam_p37.csv",
+      "note": "raw PUMS cache, not audited",
+      "size_mb": 71.79
+    },
+    {
+      "path": "/notebooks/spurious_rebuttal_data/acs/2018/1-Year/psam_p38.csv",
+      "note": "raw PUMS cache, not audited",
+      "size_mb": 5.46
+    },
+    {
+      "path": "/notebooks/spurious_rebuttal_data/acs/2018/1-Year/psam_p39.csv",
+      "note": "raw PUMS cache, not audited",
+      "size_mb": 83.31
+    },
+    {
+      "path": "/notebooks/spurious_rebuttal_data/acs/2018/1-Year/psam_p40.csv",
+      "note": "raw PUMS cache, not audited",
+      "size_mb": 26.25
+    },
+    {
+      "path": "/notebooks/spurious_rebuttal_data/acs/2018/1-Year/psam_p41.csv",
+      "note": "raw PUMS cache, not audited",
+      "size_mb": 29.58
+    },
+    {
+      "path": "/notebooks/spurious_rebuttal_data/acs/2018/1-Year/psam_p42.csv",
+      "note": "raw PUMS cache, not audited",
+      "size_mb": 90.15
+    },
+    {
+      "path": "/notebooks/spurious_rebuttal_data/acs/2018/1-Year/psam_p44.csv",
+      "note": "raw PUMS cache, not audited",
+      "size_mb": 7.39
+    },
+    {
+      "path": "/notebooks/spurious_rebuttal_data/acs/2018/1-Year/psam_p45.csv",
+      "note": "raw PUMS cache, not audited",
+      "size_mb": 34.86
+    },
+    {
+      "path": "/notebooks/spurious_rebuttal_data/acs/2018/1-Year/psam_p46.csv",
+      "note": "raw PUMS cache, not audited",
+      "size_mb": 6.22
+    },
+    {
+      "path": "/notebooks/spurious_rebuttal_data/acs/2018/1-Year/psam_p47.csv",
+      "note": "raw PUMS cache, not audited",
+      "size_mb": 47.5
+    },
+    {
+      "path": "/notebooks/spurious_rebuttal_data/acs/2018/1-Year/psam_p48.csv",
+      "note": "raw PUMS cache, not audited",
+      "size_mb": 188.14
+    },
+    {
+      "path": "/notebooks/spurious_rebuttal_data/acs/2018/1-Year/psam_p49.csv",
+      "note": "raw PUMS cache, not audited",
+      "size_mb": 22.03
+    },
+    {
+      "path": "/notebooks/spurious_rebuttal_data/acs/2018/1-Year/psam_p50.csv",
+      "note": "raw PUMS cache, not audited",
+      "size_mb": 4.5
+    },
+    {
+      "path": "/notebooks/spurious_rebuttal_data/acs/2018/1-Year/psam_p51.csv",
+      "note": "raw PUMS cache, not audited",
+      "size_mb": 59.68
+    },
+    {
+      "path": "/notebooks/spurious_rebuttal_data/acs/2018/1-Year/psam_p53.csv",
+      "note": "raw PUMS cache, not audited",
+      "size_mb": 53.58
+    },
+    {
+      "path": "/notebooks/spurious_rebuttal_data/acs/2018/1-Year/psam_p54.csv",
+      "note": "raw PUMS cache, not audited",
+      "size_mb": 12.58
+    },
+    {
+      "path": "/notebooks/spurious_rebuttal_data/acs/2018/1-Year/psam_p55.csv",
+      "note": "raw PUMS cache, not audited",
+      "size_mb": 41.58
+    },
+    {
+      "path": "/notebooks/spurious_rebuttal_data/acs/2018/1-Year/psam_p56.csv",
+      "note": "raw PUMS cache, not audited",
+      "size_mb": 4.02
+    },
+    {
+      "path": "/notebooks/spurious_rebuttal_data/acs/2018/1-Year/psam_p72.csv",
+      "note": "raw PUMS cache, not audited",
+      "size_mb": 19.77
+    },
+    {
+      "path": "/notebooks/spurious_rebuttal_data/assistments/archive.zip",
+      "size_mb": 659.05
+    },
+    {
+      "path": "/notebooks/spurious_rebuttal_data/readmission/diabetes+130-us+hospitals+for+years+1999-2008.zip",
+      "size_mb": 3.17
+    }
+  ]
+}

@@ -1,1 +1,32 @@
-PLACEHOLDER - generated during offline testing against a fake data tree. Overwritten by the first real run.
+{
+  "acsincome": {
+    "rows": 434610,
+    "cols": 12,
+    "missing_required": [],
+    "missing_expected": [],
+    "below_min_rows": false,
+    "ok": true,
+    "path": "/notebooks/spurious_rebuttal_data/acsincome/acsincome_2018_CA-NY-TX.csv.gz"
+  },
+  "readmission": {
+    "rows": 101766,
+    "cols": 50,
+    "missing_required": [],
+    "missing_expected": [],
+    "below_min_rows": false,
+    "ok": true,
+    "path": "/notebooks/spurious_rebuttal_data/readmission/diabetic_data.csv"
+  },
+  "assistments": {
+    "rows": 6123270,
+    "cols": 35,
+    "missing_required": [
+      "order_id",
+      "opportunity"
+    ],
+    "missing_expected": [],
+    "below_min_rows": false,
+    "ok": false,
+    "path": "/notebooks/spurious_rebuttal_data/assistments/2012-2013-data-with-predictions-4-final.csv"
+  }
+}
