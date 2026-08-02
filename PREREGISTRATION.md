@@ -252,6 +252,51 @@ say the dataset is not worth a GPU.
 Datasets are trained in descending order of screen effect size. A dataset that
 fails the screen is still reported, as a scope statement.
 
+### Three rules the screen must obey
+
+Fixed 2026-07-30, after the exact data audit and before the screen was written.
+
+**1. Minimum cell size 200.** A `(y, g)` cell with fewer than 200 rows is
+dropped, and a group is dropped when any of its cells is. This is the same floor
+already enforced in the Waterbirds pipeline, where a 56-row cell produced ridge
+estimates that were unstable across seeds while still printing to three
+decimals. The number of surviving groups is reported for every dataset as a
+headline figure, next to the total.
+
+**2. Group means are removed before the relation is compared.** A group-aware
+model beats a pooled one for two quite different reasons: because `s` sits at a
+different *level* in that group, or because the `r → s` *relation* has a
+different shape. Only the second is the operator `A` the theory speaks about;
+the first is ordinary covariate shift. So `r` and `s` are centred within each
+`(y, g)` cell before the comparison, and the two quantities are reported
+separately — level heterogeneity and relational heterogeneity. Only the second
+is used for ranking.
+
+**3. The null permutes clusters, not rows.** Rows are not independent. In
+ASSISTments a student contributes many responses and students sit inside
+schools; in the raw readmission file one patient contributes several encounters.
+Shuffling group labels row-wise destroys the within-cluster dependence as well
+as the group association, so the permuted statistic is far too small and
+everything looks significant — with 6M rows, arbitrarily so. The null therefore
+reassigns **whole clusters**: whole students to random schools for ASSISTments.
+For readmission the first-encounter filter below removes the clustering
+entirely, and for ACS each row is a distinct person, so row-level permutation is
+correct in both.
+
+### Two dataset-specific consequences
+
+**Readmission: first encounter per patient only.** ~15,000 patients account for
+101,766 encounters. Keeping one encounter per `patient_nbr` (~71,500 rows) is
+the standard treatment of this dataset and removes the clustering. It also
+costs cell size, which this dataset can least afford.
+
+**Readmission: `admission_source_id == 17` is dropped** if `IDS_mapping.csv`
+confirms it decodes to NULL — it is a missing-data code, not an admission route,
+and a group has to mean something. With the 200-row floor and an 11.2% positive
+rate this leaves three or four usable groups out of seventeen. That is enough to
+test heterogeneity and cramped for the `epsilon`-sweep, and the response should
+say so rather than let a reader assume seventeen.
+
 ---
 
 ## Sign-off
@@ -272,7 +317,10 @@ fails the screen is still reported, as a scope statement.
 | 2026-07-30 | readmission: `number_outpatient` and `n_diag_coded` added to `r` | replace the severity signal lost above, using patient history rather than episode handling |
 | 2026-07-30 | ASSISTments: section rewritten against the file on disk | the Kaggle slug ships the 2012–2013 release; `order_id` and `opportunity` do not exist, `correct` is not binary, `skill_id` is 54% missing |
 
-All four amendments were made before any screen, coupling or rate result
+| 2026-07-30 | screen rules fixed: 200-row `(y,g)` floor, within-cell centring before comparing relations, cluster-level permutation null | from the exact audit: readmission has only ~4 viable groups, ASSISTments has repeated measures nested in schools, and a row-level null on 6M rows would pass everything |
+| 2026-07-30 | readmission: first encounter per patient only; `admission_source_id == 17` dropped pending the mapping | 15k patients across 102k encounters is clustered data; 17 is a NULL code, not an admission route |
+
+All amendments were made before any screen, coupling or rate result
 existed. The data audit that prompted them (`results/data_audit.md`) describes
 file structure only — column names, dtypes, missingness, group counts — and
 reports no relationship between any `r`, `s`, `g` and `y`.

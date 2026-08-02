@@ -81,11 +81,33 @@ which is in the s block, is renamed `RELSHIPP` from 2019.
 | step | script | measures | cost |
 |---|---|---|---|
 | 1 | `download_data.py` | — | minutes |
-| 1b | `audit_data.py` | what is actually on disk: real filenames, columns, dtypes | seconds |
-| 2 | `screen_heterogeneity.py` | does the `r → s` relation **differ across groups**, on the raw columns, vs a group-label permutation null | seconds |
+| 1b | `audit_data.py --exact` | what is actually on disk: real filenames, columns, dtypes, exact group cell sizes | minutes |
+| 2a | `validate_datasets.py` | the feature construction against hand arithmetic. No data needed | seconds |
+| 2a | `validate_screen.py` | the screen against known ground truth. No data needed | ~1 min |
+| 2b | `screen_heterogeneity.py` | does the `r → s` relation **differ across groups**, vs a cluster-level permutation null | ~10 min/dataset |
 | 3 | `train_two_branch.py` | the frozen `Phi = (Phi_r, Phi_s)` | hours, GPU |
 | 4 | `analyze_tabular.py` | linear coupling `A`, isotropy defects, `alpha` | minutes |
 | 5 | `eps_sweep_tabular.py` | the rate prediction under group imbalance | hours |
+
+`datasets.py` implements the r/s/group/label declarations and returns
+`(r, s, y, g, cluster)` plus a `notes` dict recording every filter and what it
+cost. `python datasets.py` prints all three without running anything else.
+
+`validate_datasets.py` targets `add_prior_features`, the function that builds
+every ASSISTments feature from the student's earlier rows. Six tests: hand-
+computed values, no dependence on a row's own outcome, immunity of the final row
+(the sharpest off-by-one test), per-skill versus per-student counting, no
+cross-student contamination, and order independence. All six were confirmed to
+fail under deliberately introduced bugs — dropping the "minus own value" term,
+grouping by user without skill, grouping by skill without user, and removing the
+internal sort — so they are not passing vacuously.
+
+Run `validate_screen.py` before trusting a screen number. It builds synthetic
+data where the answer is known and checks four things: that the screen fires
+when the relation really does differ by group, stays quiet when one relation is
+shared, is not fooled by a group-specific level shift, and holds its size when
+rows are clustered. The third and fourth are the ones that would silently
+invalidate the real results.
 
 Step 2 is triage, not proof. It tests the one thing that cannot be created by
 training — group-to-group variation in the `r → s` relation — and deliberately
