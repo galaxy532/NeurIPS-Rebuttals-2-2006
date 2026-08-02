@@ -1,0 +1,90 @@
+{
+  "dataset": "acsincome",
+  "n_used": 200000,
+  "n_total": 1664500,
+  "n_groups": 2,
+  "n_clusters": 200000,
+  "r_names": [
+    "SCHL",
+    "OCCP",
+    "COW",
+    "WKHP",
+    "AGEP"
+  ],
+  "s_names": [
+    "MAR",
+    "RELP",
+    "POBP"
+  ],
+  "group_name": "SEX",
+  "loader_notes": {
+    "file": "acsincome_2018_all.csv.gz",
+    "rows_raw": 1664500,
+    "group_definition": "g = 1[SEX == 2] (female); G1 = male",
+    "eps_natural": 0.4793,
+    "min_cell": 200,
+    "groups_before_min_cell": 102,
+    "groups_after_min_cell": 102,
+    "rows_dropped_by_min_cell": 0,
+    "smallest_surviving_cell": 333,
+    "states_surviving": 51,
+    "frequency_encoded": [
+      "OCCP",
+      "POBP"
+    ],
+    "nominal_note": "MAR and RELP are small nominal codes left as integers; the screen's model is tree-based and does not assume an ordering."
+  },
+  "n_perm": 20,
+  "seed": 0,
+  "by_label": {
+    "0": {
+      "n": 126034,
+      "relational": {
+        "r2_pooled": 0.1933343972800775,
+        "r2_group_aware": 0.19424116365687874,
+        "delta_r2": 0.0009067663768012324,
+        "n_train": 88223,
+        "n_test": 37811
+      },
+      "level_and_relational": {
+        "r2_pooled": 0.19518894385114963,
+        "r2_group_aware": 0.19977038421088453,
+        "delta_r2": 0.004581440359734901,
+        "n_train": 88223,
+        "n_test": 37811
+      },
+      "level_only_delta": 0.0036746739829336683,
+      "null_mean": -1.124751618290093e-05,
+      "null_sd": 0.00026778029052309035,
+      "p_value": 0.047619047619047616,
+      "z": 3.4282354806280044,
+      "passes": true
+    },
+    "1": {
+      "n": 73966,
+      "relational": {
+        "r2_pooled": 0.06390192638575314,
+        "r2_group_aware": 0.06386246506246836,
+        "delta_r2": -3.946132328477847e-05,
+        "n_train": 51776,
+        "n_test": 22190
+      },
+      "level_and_relational": {
+        "r2_pooled": 0.06396692878928718,
+        "r2_group_aware": 0.0666577087526213,
+        "delta_r2": 0.002690779963334111,
+        "n_train": 51776,
+        "n_test": 22190
+      },
+      "level_only_delta": 0.0027302412866188897,
+      "null_mean": -2.5904888038725053e-05,
+      "null_sd": 0.0005015532725162305,
+      "p_value": 0.47619047619047616,
+      "z": -0.027028903984700304,
+      "passes": false
+    }
+  },
+  "effect_size": 0.00043365252675822696,
+  "passes": false,
+  "seconds": 189.4
+}
