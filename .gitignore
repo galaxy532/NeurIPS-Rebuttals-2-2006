@@ -25,13 +25,18 @@ datasets/
 *.h5
 *.hdf5
 
-# --- Generated artefacts. Regenerable, so they do not belong in history.
-# results/  is where every script writes. Ignored wholesale.
-# reported/ is the exception: numbers that actually went into the rebuttal are
-#           copied there BY HAND and committed, so the response text is
-#           reproducible from the repo alone.
-results/*
-!results/.gitkeep
+# --- Generated artefacts.
+#
+# results/ is TRACKED. Its contents are small .json and .md files, and they are
+# how results travel between machines and into the response. An earlier version
+# of this file ignored results/ wholesale to keep the tree clean; that was the
+# wrong trade, because it silently broke the only channel for getting numbers
+# off the training box. Heavy artefacts inside results/ are still excluded by
+# the global rules below (*.npz, *.pt, *.csv, ...), which is what the rule was
+# actually for.
+#
+# reported/ is the curated subset: numbers that went into the rebuttal, copied
+# there by hand, so the response text stays reproducible from the repo alone.
 *.npz
 *.npy
 *.pt

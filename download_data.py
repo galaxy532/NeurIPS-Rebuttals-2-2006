@@ -7,14 +7,16 @@ download_data.py — fetch the three tabular datasets for the real-data arm.
     python download_data.py --check         # report what is present, download nothing
     python download_data.py --only acs --states CA NY TX     # a cheap subset first
 
-Everything lands in ../data/ — a SIBLING of this repository, never inside it.
-That is deliberate: the files are hundreds of megabytes and, for ASSISTments and
-the UCI hospital data, not ours to redistribute. Keeping them outside the repo
-means no `git add -A` can ever pull them in.
+Everything lands in ../spurious_rebuttal_data/ — a SIBLING of this repository,
+never inside it. That is deliberate: the files are hundreds of megabytes and,
+for ASSISTments and the UCI hospital data, not ours to redistribute. Keeping
+them outside the repo means no `git add -A` can ever pull them in. The name is
+specific rather than "data" so it cannot collide with the other repos cloned
+next to it on a shared machine. Override with the SPURIOUS_DATA_ROOT env var.
 
     <parent>/
-      Rebuttals_2/        <- this repo
-      data/
+      <this repo>/
+      spurious_rebuttal_data/
         acs/              <- raw ACS PUMS csvs, managed by folktables
         acsincome/        <- the assembled table we actually use
         readmission/
@@ -69,7 +71,12 @@ import pandas as pd
 # --------------------------------------------------------------------------
 
 REPO_ROOT = Path(__file__).resolve().parent
-DATA_ROOT = REPO_ROOT.parent / "data"
+
+# Sibling of the repo, but with a name that cannot collide with the other repos
+# cloned next to it on a shared box. Override with SPURIOUS_DATA_ROOT.
+DEFAULT_DATA_DIRNAME = "spurious_rebuttal_data"
+DATA_ROOT = Path(os.environ.get(
+    "SPURIOUS_DATA_ROOT", REPO_ROOT.parent / DEFAULT_DATA_DIRNAME))
 
 USER_AGENT = "Mozilla/5.0 (compatible; research-data-fetch/1.0)"
 
@@ -263,8 +270,11 @@ def fetch_acsincome(states=None, force=False) -> dict:
 # 2. Diabetes 130-US hospitals readmission  (UCI)
 # --------------------------------------------------------------------------
 
+# Corrected 2026-07-30 from the filename of a successful manual download.
+# The archive uses hyphens in "130-us" and "1999-2008", not plus signs; the
+# earlier spelling here was my guess and it was wrong. Do not "tidy" it.
 UCI_URL = ("https://archive.ics.uci.edu/static/public/296/"
-           "diabetes+130+us+hospitals+for+years+1999+2008.zip")
+           "diabetes+130-us+hospitals+for+years+1999-2008.zip")
 
 
 def fetch_readmission(force=False) -> dict:
@@ -341,9 +351,13 @@ def fetch_assistments(force=False) -> dict:
     out_dir = DATA_ROOT / "assistments"
     out_dir.mkdir(parents=True, exist_ok=True)
 
-    existing = sorted(out_dir.glob("skill_builder_data*.csv"))
+    # Glob broadly. An earlier version looked only for skill_builder_data*.csv,
+    # so a manual download that landed under any other name was reported as
+    # "absent" while sitting in the folder. Never hard-code an expected
+    # filename for a file fetched by hand.
+    existing = sorted(p for p in out_dir.glob("*.csv") if p.stat().st_size > 1_000)
     if existing and not force:
-        _say(f"  already present: {existing[0]}")
+        _say(f"  found {len(existing)} csv(s): {[p.name for p in existing]}")
         df = pd.read_csv(existing[0], encoding="latin-1", low_memory=False)
         return check_contract("assistments", df) | {
             "path": str(existing[0]), "skipped": True}
@@ -407,10 +421,14 @@ def fetch_assistments(force=False) -> dict:
 def check_only() -> dict:
     _rule("check — what is already on disk")
     out = {}
+    # Glob by extension, never by expected filename — see fetch_assistments.
     probes = {
         "acsincome": sorted((DATA_ROOT / "acsincome").glob("*.csv.gz")),
-        "readmission": sorted((DATA_ROOT / "readmission").glob("diabetic_data.csv")),
-        "assistments": sorted((DATA_ROOT / "assistments").glob("skill_builder_data*.csv")),
+        # IDS_mapping.csv is the id decoder, not the data, and sorts first.
+        "readmission": sorted(p for p in (DATA_ROOT / "readmission").glob("*.csv")
+                              if "mapping" not in p.name.lower()),
+        "assistments": sorted(p for p in (DATA_ROOT / "assistments").glob("*.csv")
+                              if p.stat().st_size > 1_000),
     }
     for name, files in probes.items():
         _say()

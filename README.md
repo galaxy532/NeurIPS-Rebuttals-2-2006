@@ -18,17 +18,22 @@ The two arms fail in different ways, which is the point of having both.
 ## Layout
 
 ```
-Rebuttals_2/            this repo — code only
-  PREREGISTRATION.md    the r/s/group/label declaration. Read this first.
-  download_data.py      fetch the three datasets
-  common.py             migrated verbatim from Rebuttals/
-  results/              every script writes here. gitignored.
-  reported/             numbers copied here by hand once they go in the
-                        response. Tracked, so the text is reproducible.
+<this repo>/           code only
+  PREREGISTRATION.md   the r/s/group/label declaration. Read this first.
+  download_data.py     fetch the three datasets
+  audit_data.py        report what is actually on disk
+  common.py            migrated verbatim from Rebuttals/
+  results/             every script writes here. TRACKED — this is how
+                       numbers get off the training box.
+  reported/            the curated subset that goes into the response.
 
-../data/                SIBLING of this repo. Never committed.
+../spurious_rebuttal_data/    SIBLING of this repo. Never committed.
   acs/  acsincome/  readmission/  assistments/
 ```
+
+The data folder is named `spurious_rebuttal_data`, not `data`, so it cannot
+collide with the other repos cloned beside it on a shared machine. Override with
+`SPURIOUS_DATA_ROOT`.
 
 ## The three datasets
 
@@ -76,15 +81,18 @@ which is in the s block, is renamed `RELSHIPP` from 2019.
 | step | script | measures | cost |
 |---|---|---|---|
 | 1 | `download_data.py` | — | minutes |
-| 2 | `screen_dependence.py` | conditional dependence of r and s on the **raw** columns, per `(y,g)` cell, vs a permutation null | seconds |
+| 1b | `audit_data.py` | what is actually on disk: real filenames, columns, dtypes | seconds |
+| 2 | `screen_heterogeneity.py` | does the `r → s` relation **differ across groups**, on the raw columns, vs a group-label permutation null | seconds |
 | 3 | `train_two_branch.py` | the frozen `Phi = (Phi_r, Phi_s)` | hours, GPU |
 | 4 | `analyze_tabular.py` | linear coupling `A`, isotropy defects, `alpha` | minutes |
 | 5 | `eps_sweep_tabular.py` | the rate prediction under group imbalance | hours |
 
-Step 2 is a necessary condition, not a sufficient one, and it is nearly free —
-see the last section of `PREREGISTRATION.md` for why raw-column dependence
-constrains the representation but raw-column *linearity* does not. Only datasets
-that pass step 2 are worth training an extractor for.
+Step 2 is triage, not proof. It tests the one thing that cannot be created by
+training — group-to-group variation in the `r → s` relation — and deliberately
+does *not* test linearity, since linearising a nonlinear relation is exactly
+what the representation may do. See the screen section of `PREREGISTRATION.md`
+for the two wrong versions of this test and why they were dropped. Datasets are
+trained in descending order of screen effect size.
 
 ## On `common.py`
 
@@ -110,17 +118,22 @@ The functions this arm uses: `fit_operators`, `within_cell_coupling`,
 
 ## A note on the .gitignore
 
-The `Rebuttals/` repo ignores `__pycache__/` and `.ipynb_checkpoints/` and
-tracks them anyway — the rules were added after the files were already
-committed, and a `.gitignore` has no effect on tracked files. It also mixes
-generated `results_*.json` into the source tree.
+Two different failures, and this repo has now hit both.
 
-This repo fixes both: outputs go to `results/` (ignored wholesale), anything
-that reaches the response is copied to `reported/` by hand, and the ignore file
-is in place before the first commit. Verify before that first commit:
+`Rebuttals/` ignores `__pycache__/` and `.ipynb_checkpoints/` and tracks them
+anyway, because the rules were added after the files were already committed —
+a `.gitignore` has no effect on files git already tracks.
+
+This repo's first `.gitignore` overcorrected: it ignored `results/` wholesale to
+keep the tree clean, which silently broke the only channel for getting numbers
+off the training box. `results/` is now **tracked**. Its contents are small
+`.json` and `.md`; the heavy things that rule was really for (`*.npz`, `*.pt`,
+`*.csv`, datasets) are excluded by their own patterns wherever they appear.
+
+Verify before the first commit:
 
 ```bash
-git status --short     # nothing under results/, no .pyc, no checkpoints
+git status --short     # results/*.json and *.md present; no .pyc, no data
 ```
 
 If something does slip in: `git rm -r --cached <path>`.

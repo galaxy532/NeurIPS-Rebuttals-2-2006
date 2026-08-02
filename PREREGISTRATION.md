@@ -1,7 +1,8 @@
 # Pre-registration — real-data arm, three tabular datasets
 
-**Status: DRAFT, awaiting approval. Nothing downstream should read this file
-until it is approved and committed.**
+**Status: APPROVED 2026-07-30, before any dataset was analysed. The r/s/group/
+label declarations below are fixed. Later amendments must be recorded in the
+changelog at the bottom, never made silently.**
 
 This document fixes, *before any result is looked at*, which columns play the
 role of `r` and which play the role of `s` in each dataset, together with the
@@ -157,39 +158,56 @@ five attempts, you got it wrong; the "feature" is the label in disguise. So:
 
 ---
 
-## The screen, and what it can and cannot conclude
+## The screen: what it tests, and what it deliberately does not
 
-A remark on method, because an earlier version of this plan got the statistic
-wrong.
+Two earlier versions of this section were wrong, and the reasoning is recorded
+here because the wrong versions are tempting.
 
-The theory needs a **linear** coupling between `Phi_r` and `Phi_s` in the
-*learned* representation. It says nothing directly about the raw columns. A test
-on raw columns with a linear head would be a one-layer model — not the
-experiment, and not what the reviewers asked for.
+**Wrong version 1: screen on linear `R²` between the raw r and s columns.**
+Rejected because the theory needs linear coupling between `Phi_r` and `Phi_s` in
+the *learned* representation, and says nothing about the raw columns. Testing
+raw columns with a linear head is a one-layer model — not this experiment, and
+not what the reviewers asked for. Our own Colored-MNIST run is the
+counterexample: the raw `r → s` relation there is nonlinear, and the
+representation linearised it. A linear raw screen would have discarded a dataset
+that works.
 
-But there is one thing the raw columns settle for free. If `Phi_r` is a function
-of the r-columns alone and `Phi_s` a function of the s-columns alone, then
+**Wrong version 2: screen on conditional dependence of any form.** The
+implication behind it is true — if `Phi_r` is a function of the r-columns alone
+and `Phi_s` of the s-columns alone, then `r ⊥ s | (y,g)` forces
+`Phi_r ⊥ Phi_s | (y,g)`, because functions of conditionally independent
+variables are conditionally independent. So no network can manufacture coupling
+out of exact independence. But exact conditional independence does not occur in
+real observational data. The test would pass on everything, and a gate that
+never fires is not a gate.
 
-> `r` ⊥ `s` given `(y, g)`  ⟹  `Phi_r` ⊥ `Phi_s` given `(y, g)`, for *any*
-> deterministic `Phi_r`, `Phi_s`.
+**What we actually test.** The theory does not need coupling; it needs coupling
+that **differs across groups**. That is the quantity `A` in the two-branch
+setting, and if it is the same in every group there is nothing for the theory to
+bite on — no group heterogeneity, no `alpha` worth measuring, and no amount of
+training will create it. So the screen is:
 
-No network can manufacture coupling that is not present in the raw data. So
-conditional dependence in the raw columns is a genuine **necessary condition**,
-and it costs seconds to test. What it is *not* is sufficient: raw dependence may
-be nonlinear, and turning it into the linear relation the theory needs is
-precisely what the trained representation might do.
+> Fit a flexible `s ≈ f_g(r)` separately within each group `g` (and within each
+> label cell `y`). Test whether the fitted `f_g` differ across groups, against a
+> null that permutes the group labels.
 
-So the screen tests **dependence of any form** — not linear `R²` — within each
-`(y, g)` cell, against a permutation null. Linearity is measured later, on
-`Phi`, after the two-branch extractor is trained.
+This can fail, and on some datasets it will. Being flexible rather than linear
+means it inherits the Colored-MNIST lesson: a nonlinear `r → s` relation that
+differs by group still passes, because linearisation is the representation's job,
+not the screen's.
+
+It is a **ranking and triage** device, not a proof. Passing does not guarantee
+the trained representation will show linear group-varying coupling; failing does
+say the dataset is not worth a GPU.
 
 | stage | measured on | cost | question |
 |---|---|---|---|
-| screen | raw columns | seconds | is there any conditional dependence at all? |
-| coupling | `Phi`, two-branch | hours | is it linear, and does `A` differ by group? |
+| screen | raw columns | seconds | does the `r → s` relation differ across groups at all? |
+| coupling | `Phi`, two-branch | hours | is it linear in the representation, and does `A` differ by group? |
 | rates | `Phi`, last layer | hours | does the measured `alpha` predict the observed exponent? |
 
-Only datasets passing the screen get an extractor trained.
+Datasets are trained in descending order of screen effect size. A dataset that
+fails the screen is still reported, as a scope statement.
 
 ---
 
@@ -198,5 +216,13 @@ Only datasets passing the screen get an extractor trained.
 | | |
 |---|---|
 | drafted | 2026-07-30 |
-| approved by | _pending_ |
-| commit fixing this file | _pending_ |
+| approved | 2026-07-30, by the authors |
+| data on disk at approval | ACS Income (CA/NY/TX), UCI readmission. No analysis run. |
+
+## Changelog
+
+| date | change | why |
+|---|---|---|
+| 2026-07-30 | r/s/group/label declarations fixed for all three datasets | initial |
+| 2026-07-30 | screen changed from raw-column dependence to group-heterogeneity of the `r → s` relation | the dependence test passes on all real data, so it gated nothing; see the screen section |
+| _pending_ | ASSISTments columns to be confirmed against the file actually on disk | the downloaded file is the 2012–2013 release, not the 2009–2010 one this document assumed |
