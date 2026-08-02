@@ -35,17 +35,33 @@ The data folder is named `spurious_rebuttal_data`, not `data`, so it cannot
 collide with the other repos cloned beside it on a shared machine. Override with
 `SPURIOUS_DATA_ROOT`.
 
-## The three datasets
+## The datasets
 
-| dataset | y | groups | n | source |
-|---|---|---|---|---|
-| ACS Income | earns > $50k | 51 US states | ~1.6M | census.gov via `folktables` |
-| Hospital readmission | readmitted < 30 days | admission source | ~102k | UCI dataset 296 |
-| ASSISTments | next answer correct | school | ~400k | Kaggle |
+Definition 3.3 of the manuscript defines **exactly two groups**, `G1` and `G2`,
+by which operator carries `r` to `s`, with a single `eps = P(G2)`. So every
+group variable here is binary. A 51-way or 149-way partition is a different
+setting and `alpha` is not defined for it — an earlier version of this repo got
+that wrong, and `LoadedDataset` now refuses to construct with anything but two
+groups.
+
+| dataset | y | G1 / G2 | eps | n | source |
+|---|---|---|---|---|---|
+| ACS Income | earns > $50k | male / female (`SEX`) | ~0.50 | ~1.6M | census.gov via `folktables` |
+| Hospital readmission | readmitted < 30 days | emergency room / physician referral | ~0.34 | ~72k | UCI dataset 296 |
+| ~~ASSISTments~~ | — | retired | — | — | — |
+
+**States are replications, not groups.** The same two-group analysis runs inside
+each of the 51 states, giving 51 independent instances rather than one pooled
+number. States are never filtered by result.
+
+**ASSISTments is retired** — no defensible binary partition. Its only binary
+column, `tutor_mode`, separates the groups mechanically through `hint_count`,
+which is in the `s` block. The loader and its tests stay in the repo so the
+attempt is auditable; it is in `RETIRED`, not `DATASETS`.
 
 Who is `r`, who is `s`, and why — see `PREREGISTRATION.md`. That file is fixed
-before results are looked at, and all three datasets get reported whether or not
-they pass.
+before results are looked at, and every dataset gets reported whether or not it
+passes.
 
 ## Setup
 

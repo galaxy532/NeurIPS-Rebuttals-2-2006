@@ -43,6 +43,35 @@ Whether a column really is unstable across groups is an empirical question, and
 one of the things the screen measures. The declarations below are our
 prediction, made in advance.
 
+## What a *group* means here
+
+Definition 3.3 of the manuscript (`neurips_2026.tex`, lines 255–287) does not
+take groups from metadata. It defines them by which operator carries `r` to `s`:
+
+> `s | r ~ A r + xi` with probability `1 - eps`, `B r + xi` with probability `eps`
+> `G1 = {s = A r + xi}`, `G2 = {s = B r + xi}`, `eps = P(G2)`
+> "The spuriousness of `s` is defined by the condition `A != B`."
+
+Three consequences that govern everything below.
+
+**There are exactly two groups.** `eps` is a single scalar, and `alpha` is
+computed from one pair `(A, B)`. A 51-way or 147-way partition is not this
+setting. An earlier version of this document used states and schools as groups;
+that was a mistake and is corrected here.
+
+**The group variable must therefore be binary**, declared in advance, and chosen
+because there is a substantive reason to expect the `r -> s` coupling to differ
+across it — not because it makes a number come out well.
+
+**The screen is the `A != B` test.** "Does the `r -> s` relation differ across
+groups" is exactly the condition the definition calls spuriousness. The screen
+was asking the right question; only the partition was wrong.
+
+A note on a temptation we are explicitly refusing: with 51 states available it
+would be easy to keep the states whose relations differ most and drop the rest.
+That is selection on the outcome and it would invalidate every number
+downstream. States are used as **replications**, never filtered by result.
+
 ---
 
 ## 1. ACS Income — US census microdata
@@ -55,7 +84,8 @@ record. 2018 1-Year PUMS, ~1.6M records, ~51 groups.
 | **y** | `PINCP > 50000` | does this person earn over $50k |
 | **r** | `SCHL`, `OCCP`, `COW`, `WKHP`, `AGEP` | education level, occupation, class of worker, hours worked per week, age |
 | **s** | `MAR`, `RELP`, `POBP` | marital status, relationship to the head of household, place of birth |
-| **g** | `ST` | US state |
+| **g** | `SEX` | the two groups `G1`, `G2` of Definition 3.3 |
+| replication | `ST` | US state — 51 independent repeats of the same two-group test, never a group |
 
 **Why `r` is relevant.** These are the things that actually produce a wage. What
 job you hold, how much schooling you have, and how many hours you work are the
@@ -70,10 +100,27 @@ established enough to earn. Place of birth works the same way: it predicts
 income through immigration history and regional opportunity, not through any
 mechanism attached to the person's job.
 
-**Why the groups should differ.** Median age at first marriage, cost of living
-and household composition vary a lot from state to state. So the relationship
-between "has a good job" and "is married" is not the same in Utah as in New
-York — which is exactly the group-varying coupling the theory needs.
+**Why the two groups should differ — the prediction that `A != B`.** The map
+from occupation and schooling to household structure is well documented to run
+differently for men and women: the marriage earnings premium is largely a male
+phenomenon, and marital status relates to labour-force attachment in the
+opposite direction for women. So the operator carrying `r` to `s` is expected to
+differ by sex for a substantive reason, stated here before it is measured.
+
+`SEX` enters **only as the group variable**. It is in neither the `r` nor the
+`s` block, and no model is given it as a feature.
+
+**Why states are replications rather than groups.** Median age at first
+marriage, cost of living and household composition vary a lot from state to
+state, so the two-group structure plausibly looks different in Utah and in New
+York. Running the same two-group test within each state turns that into 51
+independent instances rather than one pooled number — "the predicted exponent
+held in k of 51 states" is a stronger claim than any single estimate, and it
+cannot be manufactured by a lucky partition.
+
+**On `eps`.** Sex splits close to 50/50, so `eps ≈ 0.5` before intervention.
+Imbalance is created by subsampling one group, which is what the `epsilon`-sweep
+does anyway; the natural split is the starting point, not the experiment.
 
 **Note on year.** Pinned to 2018. The ACS renames `RELP` to `RELSHIPP` from 2019
 onward, and `RELP` is in the `s` block. Changing the year silently changes the
@@ -97,7 +144,7 @@ Predict whether a diabetic patient is readmitted within 30 days of discharge.
 | **y** | `1[readmitted == "<30"]` | readmitted within 30 days |
 | **r** | `number_inpatient`, `number_emergency`, `number_outpatient`, `number_diagnoses`, `n_diag_coded` (count of non-missing `diag_1..3`) | how many times they were already hospitalised, seen in emergency or as an outpatient, and how many distinct conditions are recorded |
 | **s** | `time_in_hospital`, `num_lab_procedures`, `num_medications`, `num_procedures` | how long the stay lasted, how many lab tests were ordered, how many drugs and procedures were administered |
-| **g** | `admission_source_id` | how the patient arrived — referral, emergency room, transfer from another facility |
+| **g** | `1[admission_source_id == 7]` vs `1[== 1]` | emergency room versus physician referral. All other sources dropped |
 
 **Why `r` is relevant.** These measure how sick the patient actually is. Someone
 with many prior admissions and many recorded conditions is genuinely more likely
@@ -123,12 +170,19 @@ people longer for the same underlying illness. So the lab count tracks severity,
 but only indirectly — through institutional practice. Move the same patient to a
 different hospital and the number changes while the patient does not.
 
-**Why the groups should differ.** `admission_source_id` separates patients who
-were referred by a physician from those who came through the emergency room or
-were transferred. These routes have very different protocols: an emergency
-admission generates a burst of tests regardless of chronic severity, a scheduled
-referral does not. So the tests-per-diagnosis exchange rate genuinely differs by
-group.
+**Why the two groups should differ — the prediction that `A != B`.** An
+emergency admission generates a burst of tests and a longer observation period
+regardless of chronic severity; a scheduled physician referral runs to a planned
+protocol. So the map from patient history to episode handling — the tests and
+days that follow from a given level of prior illness — is expected to be a
+different operator on the two routes.
+
+Restricting to these two sources rather than using all of them is a consequence
+of Definition 3.3 having exactly two groups, not a filter on results: the pair
+was chosen because it is the semantically cleanest contrast and the two largest
+cells (57,494 and 29,565 encounters before the first-encounter filter), giving
+`eps ≈ 0.34` naturally. Sources 17 (NULL), 4 and 6 (transfers) and the tail are
+dropped, and the row count lost is reported.
 
 **Why this one is strategically useful.** It is the "two institutions score the
 same client differently" example from the rebuttal — the one already described
@@ -136,7 +190,33 @@ to the AC — occurring in real data rather than as a hypothetical.
 
 ---
 
-## 3. ASSISTments 2012–2013 — intelligent tutoring logs
+## 3. ASSISTments 2012–2013 — RETIRED 2026-08-02
+
+**This dataset is not carried forward. The declaration below is kept so the
+decision is auditable, and because the response should be able to say what was
+tried rather than only what worked.**
+
+Two reasons, in order of weight.
+
+**No defensible binary partition.** Definition 3.3 needs exactly two groups. The
+only natural binary column is `tutor_mode` (tutor versus test), and it is
+poisoned: in test mode students receive no feedback, so `hint_count` — which is
+in the `s` block — is close to degenerate in one group. `A` and `B` would differ
+for a mechanical reason rather than an interesting one, and a reviewer would see
+that immediately. Schools are 149-way, which is not this setting.
+
+**The 149-group screen was uninterpretable anyway.** Relational delta R2 came
+out at −0.052 and −0.028 — the group-aware model was *worse* than the pooled
+one, because 149 nominal school labels were handed to a tree as a single integer
+column. The null was more negative still (−0.116), which is the tell that the
+statistic was measuring overfitting rather than heterogeneity. Two groups would
+have removed that, but the first reason stands regardless.
+
+The loader and its validation tests remain in the repository. `add_prior_features`
+and `validate_datasets.py` still run, and the leakage guarantees they establish
+are unaffected.
+
+### The retired declaration
 
 Predict whether a student's next answer on a skill is correct.
 **6,123,270 rows**, 381 schools.
@@ -325,10 +405,18 @@ say so rather than let a reader assume seventeen.
 | 2026-07-30 | readmission: first encounter per patient only; `admission_source_id == 17` dropped pending the mapping | 15k patients across 102k encounters is clustered data; 17 is a NULL code, not an admission route |
 
 | 2026-08-02 | ASSISTments: rows with fractional `correct` dropped rather than binarised | the full file has 8 values, not the 3 the audit sniff showed; 211 rows (0.008%), so dropping is free and needs no threshold defence |
+| 2026-08-02 | **groups redefined as binary throughout** — ACS `g = SEX`, readmission `g = ER vs referral`; states demoted to replications | Definition 3.3 has exactly two groups and one `eps`; the 51-way and 149-way partitions were not the paper's setting. Made after the ACS screen, which is why the r/s blocks were deliberately left untouched |
+| 2026-08-02 | ASSISTments retired | no defensible binary partition; `tutor_mode` would separate the groups mechanically through `hint_count`, which sits in the `s` block |
 
-All amendments except the last were made before any screen, coupling or rate
-result existed. The last was made after the ACS screen but concerns only
-ASSISTments, which had not been screened, and was triggered by a row count
-rather than by a result. The data audit that prompted them (`results/data_audit.md`) describes
+Everything up to and including the screen rules was fixed before any screen,
+coupling or rate result existed.
+
+The 2026-08-02 amendments came after the ACS and readmission screens, and the
+distinction that matters is what they touched. **No `r` or `s` block was
+changed**, and no group was kept or dropped for producing a better number. What
+changed is the *arity* of the group variable, from many to two, because
+Definition 3.3 has exactly two groups and a single `eps` — a fact about the
+theory, not about the data. The 51-state ACS result is reported regardless, as
+the record of what the wrong question returned. The data audit that prompted them (`results/data_audit.md`) describes
 file structure only — column names, dtypes, missingness, group counts — and
 reports no relationship between any `r`, `s`, `g` and `y`.

@@ -85,17 +85,34 @@ class LoadedDataset:
     r: np.ndarray
     s: np.ndarray
     y: np.ndarray
-    g: np.ndarray
+    g: np.ndarray               # BINARY. Definition 3.3 has exactly two groups.
     cluster: np.ndarray
     r_names: list[str]
     s_names: list[str]
     group_name: str
     notes: dict = field(default_factory=dict)
+    # Optional replication index — a dimension along which the whole two-group
+    # analysis is repeated (US states for ACS). Never a group.
+    replicate: np.ndarray | None = None
+    replicate_name: str | None = None
+
+    def __post_init__(self) -> None:
+        vals = np.unique(self.g)
+        if len(vals) != 2:
+            raise ValueError(
+                f"{self.name}: g has {len(vals)} distinct values. Definition "
+                "3.3 defines exactly two groups, G1 and G2, with a single eps. "
+                "A many-way partition is a different setting and alpha is not "
+                "defined for it.")
 
     def __repr__(self) -> str:
+        rep = ""
+        if self.replicate is not None:
+            rep = f" reps={len(np.unique(self.replicate))}"
+        eps = float((self.g == 1).mean())
         return (f"<{self.name}: n={len(self.y):,} "
                 f"dr={self.r.shape[1]} ds={self.s.shape[1]} "
-                f"groups={len(np.unique(self.g))} "
+                f"eps={eps:.3f}{rep} "
                 f"clusters={len(np.unique(self.cluster)):,}>")
 
 
@@ -184,7 +201,22 @@ def load_acsincome(all_states: bool = True) -> LoadedDataset:
     df = pd.read_csv(path)
     notes["rows_raw"] = int(len(df))
 
-    df = apply_min_cell(df, "y", "ST", notes)
+    # g = SEX. The two groups of Definition 3.3, not a feature: SEX appears in
+    # neither block and no model is given it as an input. The substantive
+    # prediction is that the map from occupation and schooling to household
+    # structure differs by sex — the marriage earnings premium is largely male,
+    # and marital status relates to labour-force attachment in the opposite
+    # direction for women. ACS codes SEX as 1 = male, 2 = female; G2 (the
+    # minority in the theory's convention) is taken as female.
+    df["g"] = (df["SEX"] == 2).astype(int)
+    notes["group_definition"] = "g = 1[SEX == 2] (female); G1 = male"
+    notes["eps_natural"] = round(float(df["g"].mean()), 4)
+
+    # States are REPLICATIONS. Cells are (y, g) within each state, so the floor
+    # is applied on the finest partition the analysis actually uses.
+    df["_cell"] = df["ST"].astype(str) + "_" + df["g"].astype(str)
+    df = apply_min_cell(df, "y", "_cell", notes)
+    notes["states_surviving"] = int(df["ST"].nunique())
 
     r = df[ACS_R].copy()
     s = df[ACS_S].copy()
@@ -200,9 +232,10 @@ def load_acsincome(all_states: bool = True) -> LoadedDataset:
     return LoadedDataset(
         name="acsincome",
         r=r.to_numpy(dtype=float), s=s.to_numpy(dtype=float),
-        y=df["y"].to_numpy(dtype=int), g=_codes(df["ST"]),
+        y=df["y"].to_numpy(dtype=int), g=df["g"].to_numpy(dtype=int),
         cluster=np.arange(len(df)),          # one row per person
-        r_names=ACS_R, s_names=ACS_S, group_name="ST", notes=notes)
+        r_names=ACS_R, s_names=ACS_S, group_name="SEX", notes=notes,
+        replicate=_codes(df["ST"]), replicate_name="ST")
 
 
 # --------------------------------------------------------------------------
@@ -217,6 +250,12 @@ READM_S = ["time_in_hospital", "num_lab_procedures",
 # UCI mapping: 17 is the NULL code. Verified against IDS_mapping.csv at load
 # time rather than trusted from memory — see _check_source_17.
 READM_DROP_SOURCES = [17]
+
+# Definition 3.3 has two groups, so the admission route is reduced to the two
+# largest and semantically cleanest: emergency room versus physician referral.
+# G1 (majority) is the emergency room, G2 (minority) the referral.
+READM_G1_SOURCE = 7          # Emergency Room
+READM_G2_SOURCE = 1          # Physician Referral
 
 
 def _check_source_17(notes: dict) -> None:
@@ -267,8 +306,13 @@ def load_readmission() -> LoadedDataset:
 
     _check_source_17(notes)
     before = int(len(df))
-    df = df[~df["admission_source_id"].isin(READM_DROP_SOURCES)]
-    notes["rows_dropped_source_17"] = before - int(len(df))
+    df = df[df["admission_source_id"].isin([READM_G1_SOURCE, READM_G2_SOURCE])].copy()
+    notes["group_definition"] = (f"G1 = admission_source_id {READM_G1_SOURCE} "
+                                 f"(emergency room), G2 = {READM_G2_SOURCE} "
+                                 f"(physician referral)")
+    notes["rows_dropped_other_sources"] = before - int(len(df))
+    df["g"] = (df["admission_source_id"] == READM_G2_SOURCE).astype(int)
+    notes["eps_natural"] = round(float(df["g"].mean()), 4)
 
     df["y"] = (df["readmitted"].astype(str).str.strip() == "<30").astype(int)
     notes["positive_rate"] = float(df["y"].mean())
@@ -278,17 +322,17 @@ def load_readmission() -> LoadedDataset:
     diag = df[["diag_1", "diag_2", "diag_3"]].astype(str)
     df["n_diag_coded"] = (diag != "?").sum(axis=1)
 
-    df = apply_min_cell(df, "y", "admission_source_id", notes)
+    df = apply_min_cell(df, "y", "g", notes)
 
     return LoadedDataset(
         name="readmission",
         r=df[READM_R].to_numpy(dtype=float),
         s=df[READM_S].to_numpy(dtype=float),
         y=df["y"].to_numpy(dtype=int),
-        g=_codes(df["admission_source_id"]),
+        g=df["g"].to_numpy(dtype=int),
         cluster=np.arange(len(df)),          # one encounter per patient now
         r_names=READM_R, s_names=READM_S,
-        group_name="admission_source_id", notes=notes)
+        group_name="admission_source_id (ER vs referral)", notes=notes)
 
 
 # --------------------------------------------------------------------------
@@ -436,10 +480,17 @@ def load_assistments(max_rows: int | None = None) -> LoadedDataset:
         group_name="school_id", notes=notes)
 
 
+# ASSISTments is not carried forward — see PREREGISTRATION.md section 3.
+# Definition 3.3 needs two groups; the only binary column in that file is
+# `tutor_mode`, and it separates the groups mechanically through `hint_count`,
+# which sits in the s block. The loader above and its tests are kept so the
+# attempt is auditable and so `validate_datasets.py` still exercises the
+# leakage guarantees, but it is not in DATASETS and is not screened.
+RETIRED = {"assistments": load_assistments}
+
 DATASETS = {
     "acsincome": load_acsincome,
     "readmission": load_readmission,
-    "assistments": load_assistments,
 }
 
 
