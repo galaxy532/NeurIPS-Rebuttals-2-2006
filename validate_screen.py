@@ -102,6 +102,18 @@ def case_clustered_null(n_clusters=400, per=15, k=4):
 
 
 def main() -> int:
+    import argparse
+    import json
+    import platform
+    from datetime import datetime, timezone
+    from pathlib import Path
+
+    ap = argparse.ArgumentParser(description="Check the screen against known truth.")
+    ap.add_argument("--out", type=Path,
+                    default=Path(__file__).resolve().parent / "results",
+                    help="where to write the record. /tmp when testing.")
+    args = ap.parse_args()
+
     cases = [
         ("power           ", case_power,           "delta >> 0, p small"),
         ("calibration     ", case_calibration,     "delta ~ 0, p not small"),
@@ -132,7 +144,30 @@ def main() -> int:
                             "clustered rows — this is exactly the ASSISTments "
                             "shape, so results there would be worthless")
 
-    print()
+    # Persist, for the same reason as validate_datasets.py: the calibration and
+    # clustered-null results are what license every screen number, and they need
+    # to sit next to them rather than in a terminal scrollback.
+    record = {"when": datetime.now(timezone.utc).isoformat(),
+              "host": platform.node(), "python": platform.python_version(),
+              "all_passed": not failures,
+              "cases": {n.strip(): {"expect": e, **o} for n, o, e in rows},
+              "failures": failures}
+    args.out.mkdir(parents=True, exist_ok=True)
+    (args.out / "validate_screen.json").write_text(
+        json.dumps(record, indent=2, default=str))
+    lines = ["# Validation — the heterogeneity screen", "",
+             f"Run {record['when']} on `{record['host']}`, "
+             f"Python {record['python']}.", "",
+             "| case | delta R2 | level-only | null mean | p | expected |",
+             "|---|---|---|---|---|---|"]
+    lines += [f"| {n.strip()} | {o['delta']:+.4f} | {o['level_only']:+.4f} | "
+              f"{o['null_mean']:+.4f} | {o['p']:.4f} | {e} |"
+              for n, o, e in rows]
+    if failures:
+        lines += ["", "## Failures", ""] + [f"- {f}" for f in failures]
+    (args.out / "validate_screen.md").write_text("\n".join(lines))
+    print(f"\nrecorded in {args.out / 'validate_screen.md'}")
+
     if failures:
         print("FAILED:")
         for f in failures:

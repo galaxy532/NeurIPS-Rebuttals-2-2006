@@ -381,9 +381,18 @@ def load_assistments(max_rows: int | None = None) -> LoadedDataset:
     df = df[df["original"] == 1].copy()
     notes["rows_after_original_filter"] = int(len(df))
 
+    # `correct` is not binary. The first run on the real file found EIGHT
+    # distinct values — 0, 0.25, 0.5, 0.6, 0.65, 0.75, 0.95, 1 — where the
+    # 20k-row audit sniff had shown three. Anything below 1.0 is currently
+    # treated as not-fully-correct, which lumps 0.95 in with 0.0. Whether that
+    # is right depends on how many rows are fractional, so the count is
+    # recorded here for the decision rather than left invisible.
     df["is_correct"] = (df["correct"] == 1.0).astype(int)
-    notes["correct_values_seen"] = sorted(
-        float(v) for v in pd.unique(df["correct"])[:10])
+    vals = pd.unique(df["correct"])
+    notes["correct_values_seen"] = sorted(float(v) for v in vals)
+    partial = df["correct"].between(0, 1, inclusive="neither")
+    notes["rows_partial_credit"] = int(partial.sum())
+    notes["frac_partial_credit"] = round(float(partial.mean()), 6)
 
     # chronological order within student; ties broken deterministically
     df["start_time"] = pd.to_datetime(df["start_time"], errors="coerce")

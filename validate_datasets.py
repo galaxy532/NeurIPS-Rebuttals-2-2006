@@ -199,6 +199,18 @@ def test_unsorted_input() -> list[str]:
 
 
 def main() -> int:
+    import argparse
+    import json
+    import platform
+    from datetime import datetime, timezone
+    from pathlib import Path
+
+    ap = argparse.ArgumentParser(description="Check datasets.py feature construction.")
+    ap.add_argument("--out", type=Path,
+                    default=Path(__file__).resolve().parent / "results",
+                    help="where to write the record. /tmp when testing.")
+    args = ap.parse_args()
+
     tests = [
         ("hand values     ", test_hand_values),
         ("no self-leak    ", test_no_self_leak),
@@ -207,15 +219,33 @@ def main() -> int:
         ("no cross-user   ", test_no_cross_user),
         ("unsorted input  ", test_unsorted_input),
     ]
-    all_fails = []
+    record, all_fails = {}, []
     for name, fn in tests:
         fails = fn()
         print(f"{name}  {'PASS' if not fails else 'FAIL'}")
         for f in fails:
             print(f"    {f}")
+        record[name.strip()] = {"passed": not fails, "failures": fails}
         all_fails += fails
 
-    print()
+    # Persist. A validation nobody can point at later is not evidence, and
+    # these results belong next to the numbers they certify.
+    out = {"when": datetime.now(timezone.utc).isoformat(),
+           "host": platform.node(), "python": platform.python_version(),
+           "all_passed": not all_fails, "tests": record}
+    args.out.mkdir(parents=True, exist_ok=True)
+    (args.out / "validate_datasets.json").write_text(
+        json.dumps(out, indent=2, default=str))
+    lines = ["# Validation — feature construction (`add_prior_features`)", "",
+             f"Run {out['when']} on `{out['host']}`, Python {out['python']}.", "",
+             "| test | result |", "|---|---|"]
+    lines += [f"| {k} | {'PASS' if v['passed'] else 'FAIL'} |"
+              for k, v in record.items()]
+    if all_fails:
+        lines += ["", "## Failures", ""] + [f"- {f}" for f in all_fails]
+    (args.out / "validate_datasets.md").write_text("\n".join(lines))
+    print(f"\nrecorded in {args.out / 'validate_datasets.md'}")
+
     if all_fails:
         print(f"{len(all_fails)} failure(s). Do not run the screen until these "
               "are fixed — the leakage ones would produce good-looking numbers.")
