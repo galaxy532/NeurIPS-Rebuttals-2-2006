@@ -1,0 +1,32 @@
+{
+  "when": "2026-08-02T04:21:08.368763+00:00",
+  "host": "nc8jacg86s",
+  "python": "3.12.13",
+  "all_passed": true,
+  "tests": {
+    "hand values": {
+      "passed": true,
+      "failures": []
+    },
+    "no self-leak": {
+      "passed": true,
+      "failures": []
+    },
+    "last row immune": {
+      "passed": true,
+      "failures": []
+    },
+    "per-skill count": {
+      "passed": true,
+      "failures": []
+    },
+    "no cross-user": {
+      "passed": true,
+      "failures": []
+    },
+    "unsorted input": {
+      "passed": true,
+      "failures": []
+    }
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "when": "2026-08-02T04:23:32.809021+00:00",
+  "host": "nc8jacg86s",
+  "python": "3.12.13",
+  "all_passed": true,
+  "cases": {
+    "power": {
+      "expect": "delta >> 0, p small",
+      "delta": 0.5156421244731163,
+      "level_only": 0.0055288878943881015,
+      "null_mean": -0.00253658913939899,
+      "p": 0.047619047619047616
+    },
+    "calibration": {
+      "expect": "delta ~ 0, p not small",
+      "delta": -0.00031238532987765133,
+      "level_only": 1.850822458948631e-05,
+      "null_mean": -0.0007359395202665708,
+      "p": 0.42857142857142855
+    },
+    "level-only": {
+      "expect": "delta ~ 0, level_only >> 0",
+      "delta": -3.3414613274773686e-05,
+      "level_only": 0.43290969715533933,
+      "null_mean": -0.0025266915688817613,
+      "p": 0.19047619047619047
+    },
+    "clustered null": {
+      "expect": "p not small",
+      "delta": -0.0075899465933982335,
+      "level_only": 0.005158220794882318,
+      "null_mean": -0.0062671661497309935,
+      "p": 0.7142857142857143
+    }
+  },
+  "failures": []
+}
