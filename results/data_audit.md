@@ -7,9 +7,13 @@ Data root: `/notebooks/spurious_rebuttal_data`
 ## `acsincome/acsincome_2018_CA-NY-TX.csv.gz`
 
 - size: 3.49 MB
-- rows: 434610
+- rows: 434,610 (exact)
 - columns: 12
 - read as: utf-8
+- group `ST`: 3 distinct, 3 with >=200 rows, 3 with >=2000 rows
+- group `y`: 2 distinct, 2 with >=200 rows, 2 with >=2000 rows
+
+Column n-unique below is measured on the first 20k rows only. These files are written in blocks, so a block-sorted column (ACS is concatenated state by state) will look constant here and is not. Trust the group lines above, not this table, for cardinality.
 
 | column | dtype | null frac | n unique | sample |
 |---|---|---|---|---|
@@ -29,9 +33,13 @@ Data root: `/notebooks/spurious_rebuttal_data`
 ## `acsincome/acsincome_2018_all.csv.gz`
 
 - size: 13.12 MB
-- rows: 1664500
+- rows: 1,664,500 (exact)
 - columns: 12
 - read as: utf-8
+- group `ST`: 51 distinct, 51 with >=200 rows, 51 with >=2000 rows
+- group `y`: 2 distinct, 2 with >=200 rows, 2 with >=2000 rows
+
+Column n-unique below is measured on the first 20k rows only. These files are written in blocks, so a block-sorted column (ACS is concatenated state by state) will look constant here and is not. Trust the group lines above, not this table, for cardinality.
 
 | column | dtype | null frac | n unique | sample |
 |---|---|---|---|---|
@@ -51,9 +59,13 @@ Data root: `/notebooks/spurious_rebuttal_data`
 ## `assistments/2012-2013-data-with-predictions-4-final.csv`
 
 - size: 3009.49 MB
-- rows: 82773406
+- rows: 6,123,270 (exact)
 - columns: 35
 - read as: utf-8
+- **multi-line fields present**: 82,773,406 physical lines vs 6,123,270 rows
+- group `school_id`: 661 distinct, 414 with >=200 rows, 243 with >=2000 rows
+
+Column n-unique below is measured on the first 20k rows only. These files are written in blocks, so a block-sorted column (ACS is concatenated state by state) will look constant here and is not. Trust the group lines above, not this table, for cardinality.
 
 | column | dtype | null frac | n unique | sample |
 |---|---|---|---|---|
@@ -105,9 +117,11 @@ Data root: `/notebooks/spurious_rebuttal_data`
 ## `readmission/IDS_mapping.csv`
 
 - size: 0.0 MB
-- rows: 67
+- rows: 67 (exact)
 - columns: 2
 - read as: utf-8
+
+Column n-unique below is measured on the first 20k rows only. These files are written in blocks, so a block-sorted column (ACS is concatenated state by state) will look constant here and is not. Trust the group lines above, not this table, for cardinality.
 
 | column | dtype | null frac | n unique | sample |
 |---|---|---|---|---|
@@ -117,9 +131,13 @@ Data root: `/notebooks/spurious_rebuttal_data`
 ## `readmission/diabetic_data.csv`
 
 - size: 19.16 MB
-- rows: 101766
+- rows: 101,766 (exact)
 - columns: 50
 - read as: utf-8
+- group `admission_source_id`: 17 distinct, 7 with >=200 rows, 5 with >=2000 rows
+- group `readmitted`: 3 distinct, 3 with >=200 rows, 3 with >=2000 rows
+
+Column n-unique below is measured on the first 20k rows only. These files are written in blocks, so a block-sorted column (ACS is concatenated state by state) will look constant here and is not. Trust the group lines above, not this table, for cardinality.
 
 | column | dtype | null frac | n unique | sample |
 |---|---|---|---|---|

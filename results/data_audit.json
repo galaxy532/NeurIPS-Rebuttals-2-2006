@@ -7,8 +7,41 @@
       "parent": "acsincome",
       "size_mb": 3.49,
       "read": "utf-8",
-      "rows_total": 434610,
+      "physical_lines": 434610,
       "rows_sniffed": 20000,
+      "rows_exact": 434610,
+      "group_profiles": [
+        {
+          "column": "ST",
+          "n_groups": 3,
+          "n_groups_ge_200": 3,
+          "n_groups_ge_2000": 3,
+          "largest": {
+            "6": 195665,
+            "48": 135924,
+            "36": 103021
+          },
+          "smallest": {
+            "6": 195665,
+            "48": 135924,
+            "36": 103021
+          }
+        },
+        {
+          "column": "y",
+          "n_groups": 2,
+          "n_groups_ge_200": 2,
+          "n_groups_ge_2000": 2,
+          "largest": {
+            "0": 261963,
+            "1": 172647
+          },
+          "smallest": {
+            "0": 261963,
+            "1": 172647
+          }
+        }
+      ],
       "n_columns": 12,
       "columns": [
         "AGEP",
@@ -149,8 +182,50 @@
       "parent": "acsincome",
       "size_mb": 13.12,
       "read": "utf-8",
-      "rows_total": 1664500,
+      "physical_lines": 1664500,
       "rows_sniffed": 20000,
+      "rows_exact": 1664500,
+      "group_profiles": [
+        {
+          "column": "ST",
+          "n_groups": 51,
+          "n_groups_ge_200": 51,
+          "n_groups_ge_2000": 51,
+          "largest": {
+            "6": 195665,
+            "48": 135924,
+            "36": 103021,
+            "12": 98925,
+            "42": 68308,
+            "17": 67016,
+            "39": 62135,
+            "37": 52067,
+            "13": 50915,
+            "26": 50008
+          },
+          "smallest": {
+            "10": 4713,
+            "38": 4455,
+            "50": 3767,
+            "2": 3546,
+            "56": 3064
+          }
+        },
+        {
+          "column": "y",
+          "n_groups": 2,
+          "n_groups_ge_200": 2,
+          "n_groups_ge_2000": 2,
+          "largest": {
+            "0": 1050433,
+            "1": 614067
+          },
+          "smallest": {
+            "0": 1050433,
+            "1": 614067
+          }
+        }
+      ],
       "n_columns": 12,
       "columns": [
         "AGEP",
@@ -291,8 +366,37 @@
       "parent": "assistments",
       "size_mb": 3009.49,
       "read": "utf-8",
-      "rows_total": 82773406,
+      "physical_lines": 82773406,
       "rows_sniffed": 20000,
+      "rows_exact": 6123270,
+      "multiline_fields": true,
+      "group_profiles": [
+        {
+          "column": "school_id",
+          "n_groups": 661,
+          "n_groups_ge_200": 414,
+          "n_groups_ge_2000": 243,
+          "largest": {
+            "5450.0": 618486,
+            "5444.0": 350428,
+            "76.0": 236916,
+            "5104.0": 231953,
+            "7857.0": 209435,
+            "2770.0": 158748,
+            "6443.0": 143933,
+            "73.0": 124400,
+            "5307.0": 121160,
+            "4986.0": 114836
+          },
+          "smallest": {
+            "12099.0": 1,
+            "12176.0": 1,
+            "12098.0": 1,
+            "12199.0": 1,
+            "12353.0": 1
+          }
+        }
+      ],
       "n_columns": 35,
       "columns": [
         "problem_log_id",
@@ -685,8 +789,9 @@
       "parent": "readmission",
       "size_mb": 0.0,
       "read": "utf-8",
-      "rows_total": 67,
+      "physical_lines": 67,
       "rows_sniffed": 67,
+      "rows_exact": 67,
       "n_columns": 2,
       "columns": [
         "admission_type_id",
@@ -727,8 +832,52 @@
       "parent": "readmission",
       "size_mb": 19.16,
       "read": "utf-8",
-      "rows_total": 101766,
+      "physical_lines": 101766,
       "rows_sniffed": 20000,
+      "rows_exact": 101766,
+      "group_profiles": [
+        {
+          "column": "admission_source_id",
+          "n_groups": 17,
+          "n_groups_ge_200": 7,
+          "n_groups_ge_2000": 5,
+          "largest": {
+            "7": 57494,
+            "1": 29565,
+            "17": 6781,
+            "4": 3187,
+            "6": 2264,
+            "2": 1104,
+            "5": 855,
+            "3": 187,
+            "20": 161,
+            "9": 125
+          },
+          "smallest": {
+            "10": 8,
+            "14": 2,
+            "11": 2,
+            "25": 2,
+            "13": 1
+          }
+        },
+        {
+          "column": "readmitted",
+          "n_groups": 3,
+          "n_groups_ge_200": 3,
+          "n_groups_ge_2000": 3,
+          "largest": {
+            "NO": 54864,
+            ">30": 35545,
+            "<30": 11357
+          },
+          "smallest": {
+            "NO": 54864,
+            ">30": 35545,
+            "<30": 11357
+          }
+        }
+      ],
       "n_columns": 50,
       "columns": [
         "encounter_id",
