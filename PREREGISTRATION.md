@@ -162,9 +162,13 @@ the time of the rewrite.*
 - **`n_prior_skill` is computed, not read.** No `opportunity` column exists;
   it is the count of the student's strictly-earlier rows with the same
   `skill_id`.
-- **`correct` takes 5 distinct values**, including 0.25 — partial credit. The
-  label is `1[correct == 1.0]`, restricted to `original == 1` so that
-  scaffolding sub-problems do not enter as independent items.
+- **`correct` takes 8 distinct values** on the full file — 0, 0.25, 0.5, 0.6,
+  0.65, 0.75, 0.95, 1 — where the 20k-row audit sniff had shown three. Rows with
+  fractional credit are **dropped**, not binarised: `== 1.0` would file a 0.95
+  alongside a 0.0 and `>= 0.5` is an arbitrary cut, whereas dropping needs no
+  defence. It costs 211 rows of 2.6M (0.008%). The label is then
+  `1[correct == 1.0]`, restricted to `original == 1` so that scaffolding
+  sub-problems do not enter as independent items.
 - **`skill_id` is 54% missing.** Rows without it are dropped, leaving ~2.8M.
   Reported as a filter, not hidden.
 
@@ -320,7 +324,11 @@ say so rather than let a reader assume seventeen.
 | 2026-07-30 | screen rules fixed: 200-row `(y,g)` floor, within-cell centring before comparing relations, cluster-level permutation null | from the exact audit: readmission has only ~4 viable groups, ASSISTments has repeated measures nested in schools, and a row-level null on 6M rows would pass everything |
 | 2026-07-30 | readmission: first encounter per patient only; `admission_source_id == 17` dropped pending the mapping | 15k patients across 102k encounters is clustered data; 17 is a NULL code, not an admission route |
 
-All amendments were made before any screen, coupling or rate result
-existed. The data audit that prompted them (`results/data_audit.md`) describes
+| 2026-08-02 | ASSISTments: rows with fractional `correct` dropped rather than binarised | the full file has 8 values, not the 3 the audit sniff showed; 211 rows (0.008%), so dropping is free and needs no threshold defence |
+
+All amendments except the last were made before any screen, coupling or rate
+result existed. The last was made after the ACS screen but concerns only
+ASSISTments, which had not been screened, and was triggered by a row count
+rather than by a result. The data audit that prompted them (`results/data_audit.md`) describes
 file structure only — column names, dtypes, missingness, group counts — and
 reports no relationship between any `r`, `s`, `g` and `y`.

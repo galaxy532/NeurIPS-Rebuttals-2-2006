@@ -255,7 +255,35 @@ def screen_dataset(name: str, n_perm: int, budget: int, seed: int,
 # --------------------------------------------------------------------------
 
 def write_report(results: list[dict], out_dir: Path) -> None:
+    """
+    Write one file per dataset, then rebuild the summary from EVERY per-dataset
+    file on disk.
+
+    The first version wrote only screen_summary.{json,md}, so running
+    `--only acsincome` and then `--only readmission` silently destroyed the
+    first result. Per-dataset files make each run additive, and the summary is
+    a view over them rather than a thing that can be clobbered.
+    """
     out_dir.mkdir(parents=True, exist_ok=True)
+
+    for r in results:
+        (out_dir / f"screen_{r['dataset']}.json").write_text(
+            json.dumps(r, indent=2, default=str))
+
+    # reload everything, including datasets screened in earlier runs
+    merged: dict[str, dict] = {}
+    for path in sorted(out_dir.glob("screen_*.json")):
+        if path.name == "screen_summary.json":
+            continue
+        try:
+            rec = json.loads(path.read_text())
+            merged[rec["dataset"]] = rec
+        except Exception:                                        # noqa: BLE001
+            continue
+    for r in results:                       # this run wins on conflict
+        merged[r["dataset"]] = r
+    results = list(merged.values())
+
     ok = [r for r in results if "error" not in r]
     ok.sort(key=lambda r: (r.get("effect_size") or -9e9), reverse=True)
 
@@ -285,18 +313,32 @@ def write_report(results: list[dict], out_dir: Path) -> None:
         if "error" in r:
             lines.append(f"- **{r['dataset']}** — failed: {r['error']}")
 
-    lines += ["", "## Level versus relation", "",
-              "`level_only_delta` is how much of the group-aware advantage came "
-              "from s sitting at a different level rather than from a different "
+    lines += ["", "## Read the effect size, not the p-value", "",
+              "These are large samples. At n = 200,000 the null spread is tiny, "
+              "so a relational delta of 0.001 lands at z > 4 while explaining "
+              "one tenth of one percent of the variance in s. Significance here "
+              "says the effect is not exactly zero; it says nothing about "
+              "whether it is big enough for the theory to bite. Rank on "
+              "`delta R2`, and treat p only as a floor check.", "",
+              "## Level versus relation", "",
+              "`level_only` is how much of the group-aware advantage came from s "
+              "sitting at a different level rather than from a different "
               "relation. A large value with a small relational delta means "
-              "ordinary covariate shift, which this paper is not about.", ""]
+              "ordinary covariate shift, which this paper is not about. The "
+              "share column is relational / (relational + level): the fraction "
+              "of the group effect that is about the operator.", "",
+              "| dataset | y | relational | level-only | relational share |",
+              "|---|---|---|---|---|"]
     for r in ok:
         for label, v in r["by_label"].items():
             if "relational" not in v:
                 continue
-            lines.append(f"- {r['dataset']} y={label}: relational "
-                         f"{v['relational']['delta_r2']:+.4f}, level-only "
-                         f"{v['level_only_delta']:+.4f}")
+            rel = v["relational"]["delta_r2"]
+            lvl = v["level_only_delta"]
+            denom = abs(rel) + abs(lvl)
+            share = f"{abs(rel) / denom:.1%}" if denom > 0 else "n/a"
+            lines.append(f"| {r['dataset']} | {label} | {rel:+.4f} | "
+                         f"{lvl:+.4f} | {share} |")
 
     (out_dir / "screen_summary.md").write_text("\n".join(lines))
     (out_dir / "screen_summary.json").write_text(

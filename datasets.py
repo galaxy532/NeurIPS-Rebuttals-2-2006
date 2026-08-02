@@ -387,12 +387,21 @@ def load_assistments(max_rows: int | None = None) -> LoadedDataset:
     # treated as not-fully-correct, which lumps 0.95 in with 0.0. Whether that
     # is right depends on how many rows are fractional, so the count is
     # recorded here for the decision rather than left invisible.
-    df["is_correct"] = (df["correct"] == 1.0).astype(int)
     vals = pd.unique(df["correct"])
     notes["correct_values_seen"] = sorted(float(v) for v in vals)
     partial = df["correct"].between(0, 1, inclusive="neither")
     notes["rows_partial_credit"] = int(partial.sum())
     notes["frac_partial_credit"] = round(float(partial.mean()), 6)
+
+    # Partial credit is dropped rather than binarised. The real file has eight
+    # values of `correct` (0, 0.25, 0.5, 0.6, 0.65, 0.75, 0.95, 1), and any
+    # threshold rule has to defend itself: `== 1.0` files 0.95 with 0.0, and
+    # `>= 0.5` is an arbitrary cut. Dropping them removes the question, and it
+    # is free — 211 rows of 2.6M, 0.008%. Recorded above so the cost is visible
+    # rather than assumed small.
+    df = df[~partial].copy()
+    notes["rows_after_partial_credit_drop"] = int(len(df))
+    df["is_correct"] = (df["correct"] == 1.0).astype(int)
 
     # chronological order within student; ties broken deterministically
     df["start_time"] = pd.to_datetime(df["start_time"], errors="coerce")
@@ -440,13 +449,61 @@ def load_dataset(name: str, **kwargs) -> LoadedDataset:
     return DATASETS[name](**kwargs)
 
 
+def _write_notes(records: dict, out_dir: Path) -> None:
+    """
+    Persist the filter chains. These counts go into the response — how many
+    rows each filter cost, how many groups survived the floor — and an earlier
+    version only printed them, so they lived in a terminal scrollback and had to
+    be pasted back by hand. Merges with any previous run so loading one dataset
+    does not erase the others.
+    """
+    out_dir.mkdir(parents=True, exist_ok=True)
+    path = out_dir / "dataset_notes.json"
+    merged = {}
+    if path.exists():
+        try:
+            merged = json.loads(path.read_text())
+        except Exception:                                        # noqa: BLE001
+            merged = {}
+    merged.update(records)
+    path.write_text(json.dumps(merged, indent=2, default=str))
+
+    lines = ["# Dataset loading — filter chains", "",
+             "Every filter applied by `datasets.py`, and what it cost.", ""]
+    for name, rec in merged.items():
+        lines += [f"## {name}", ""]
+        if "error" in rec:
+            lines += [f"**FAILED** — {rec['error']}", ""]
+            continue
+        lines += [f"- {rec['summary']}", "", "| field | value |", "|---|---|"]
+        lines += [f"| `{k}` | {v} |" for k, v in rec["notes"].items()
+                  if not isinstance(v, (list, dict))]
+        lines.append("")
+    (out_dir / "dataset_notes.md").write_text("\n".join(lines))
+    print(f"\nrecorded in {out_dir / 'dataset_notes.md'}")
+
+
 if __name__ == "__main__":
-    import sys
-    which = sys.argv[1:] or list(DATASETS)
-    for name in which:
+    import argparse
+
+    ap = argparse.ArgumentParser(description="Load and describe the datasets.")
+    ap.add_argument("names", nargs="*", default=None,
+                    help=f"any of {list(DATASETS)}; default all")
+    ap.add_argument("--out", type=Path, default=REPO_ROOT / "results",
+                    help="where to write dataset_notes.{json,md}")
+    args = ap.parse_args()
+
+    records = {}
+    for name in (args.names or list(DATASETS)):
         try:
             d = load_dataset(name)
             print(d)
             print(json.dumps(d.notes, indent=2, default=str))
+            records[name] = {"summary": repr(d), "notes": d.notes,
+                             "n": int(len(d.y)),
+                             "n_groups": int(len(np.unique(d.g))),
+                             "n_clusters": int(len(np.unique(d.cluster)))}
         except Exception as exc:                                 # noqa: BLE001
             print(f"{name}: FAILED — {exc}")
+            records[name] = {"error": str(exc)}
+    _write_notes(records, args.out)
